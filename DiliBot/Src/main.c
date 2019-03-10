@@ -71,6 +71,7 @@ TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim8;
 
+UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart5;
 DMA_HandleTypeDef hdma_uart5_rx;
 
@@ -90,6 +91,7 @@ static void MX_UART5_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_ADC1_Init(void);
+static void MX_UART4_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -107,6 +109,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
   int config_status = 0;
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -135,34 +138,36 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM4_Init();
   MX_ADC1_Init();
+  MX_UART4_Init();
   /* USER CODE BEGIN 2 */
-  // Init motor and encoder
+  // Dili-Bot hello world and checking debug message
+  printf("Dili-Bot Hello World %d ^^\r\n", 2019);
+
+  // Initialize motor and encoder
   config_status  = motor_Init();
   config_status += encoder_Init();
   if (config_status != 0) Error_Handler();
 
-
   /* Configurate IMU and start binary streaming */
   /* Uncommand these three lines when we ready to read IMU */
-//  config_status  = imu_CmdInit();
-//  config_status += imu_StartIRQ(imu_value_f, 12);
-//  if (config_status != 0) Error_Handler();
-  
+  config_status  = imu_CmdInit();
+  config_status += imu_StartIRQ(imu_value_f, 12);
+  if (config_status != 0) Error_Handler();
+  /* Start IMU should be the final configuration => Not thing else and start */
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    // Uncommand this line to check motor control API
+    // This testing function already contant delay 500ms
+    TEST_AllMotor();
+    TEST_Motor_API();
+    TEST_Encoder_API();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
-    // Uncommand this line to check motor control API
-    // This testing function already contant delay 500ms
-    // Do not call this function if IMU is connected !!!!!!!!!!!!!!11
-    //TEST_AllMotor();
-    //TEST_Motor_API();
   }
   /* USER CODE END 3 */
 }
@@ -496,6 +501,39 @@ static void MX_TIM8_Init(void)
 }
 
 /**
+  * @brief UART4 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_UART4_Init(void)
+{
+
+  /* USER CODE BEGIN UART4_Init 0 */
+
+  /* USER CODE END UART4_Init 0 */
+
+  /* USER CODE BEGIN UART4_Init 1 */
+
+  /* USER CODE END UART4_Init 1 */
+  huart4.Instance = UART4;
+  huart4.Init.BaudRate = 115200;
+  huart4.Init.WordLength = UART_WORDLENGTH_8B;
+  huart4.Init.StopBits = UART_STOPBITS_1;
+  huart4.Init.Parity = UART_PARITY_NONE;
+  huart4.Init.Mode = UART_MODE_TX_RX;
+  huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart4.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN UART4_Init 2 */
+
+  /* USER CODE END UART4_Init 2 */
+
+}
+
+/**
   * @brief UART5 Initialization Function
   * @param None
   * @retval None
@@ -575,14 +613,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PA9 PA10 */
-  GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_10;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF7_USART1;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 }
 

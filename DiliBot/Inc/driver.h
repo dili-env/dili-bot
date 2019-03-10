@@ -5,10 +5,10 @@
 #define _DIRVER_H_
 
 #include "stm32f4xx_hal.h"
-
+#include "stdio.h"
 /* Private type define *******************************************************/
 typedef enum {
-  MOTOR_1,
+  MOTOR_1 = 0,
   MOTOR_2,
   MOTOR_3
 } MotorIndex;
@@ -30,6 +30,13 @@ enum {
   BIT_EN2  = 0x80  // 0B 1000.0000
 };
 
+// Debug suport function
+#ifdef __GNUC__
+#define PUTCHAR_PROTOTYPE int __io_putchar(int char)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
+
 void SPI_DataSend(uint8_t *data, uint16_t size);
 
 void TEST_AllMotor(void);
@@ -49,7 +56,8 @@ int motor_SetSpeed(MotorIndex motor_index, int value);
 
 /// API for encoder control function declaration
 int encoder_Init(void);
-
+int encoder_ReadMotor(MotorIndex motor_idx);
 
 void TEST_Motor_API(void);
+void TEST_Encoder_API(void);
 #endif

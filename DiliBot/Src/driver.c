@@ -9,9 +9,16 @@ extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim8;
+extern UART_HandleTypeDef huart4;
 extern UART_HandleTypeDef huart5;
 
 uint8_t SPI_Buffer;
+
+/// @brief Retarget the C library function to UART
+PUTCHAR_PROTOTYPE {
+  HAL_UART_Transmit(&huart4, (uint8_t*)&ch, 1, 10);
+  return ch;
+}
 
 void SPI_DataSend(uint8_t *data, uint16_t size) {
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
@@ -32,23 +39,11 @@ void TEST_AllMotor(void) {
 }
 
 void TEST_Motor_API(void) {
-  uint32_t counter1 = 0;
-  uint32_t counter2 = 0;
-  uint32_t counter3 = 0;
-  uint8_t uart_buffer[50];
   static int tmp = 0;
 
   if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET) {
-    counter1 = TIM1->CNT;
-    counter2 = TIM4->CNT;
-    counter3 = TIM8->CNT;
-
-    snprintf((char*)uart_buffer, 50, "\nValue (1) is: %d -- ", counter1);
-    HAL_UART_Transmit(&huart5, uart_buffer, 20, 10);
-    snprintf((char*)uart_buffer, 50, "Value (2) is: %d -- ", counter2);
-    HAL_UART_Transmit(&huart5, uart_buffer, 20, 10);
-    snprintf((char*)uart_buffer, 50, "Value (3) is: %d\r\n", counter3);
-    HAL_UART_Transmit(&huart5, uart_buffer, 20, 10);
+    printf("Value (1) is: %d -- Value (2) is: %d -- Value (3) is: %d\r\n",
+            TIM1->CNT, TIM4->CNT, TIM8->CNT);
     tmp ++;
   }
   if (tmp > 3) motor_Disable(MOTOR_1);
@@ -69,6 +64,29 @@ void TEST_Motor_API(void) {
   HAL_Delay(500);
 }
 
+
+void TEST_Encoder_API(void) {
+  static int pre_encoder[3]; // testing encoder
+
+  if(encoder_ReadMotor(MOTOR_1) != pre_encoder[0]) {
+    pre_encoder[0] = encoder_ReadMotor(MOTOR_1);
+    printf("Current encoder 1 value = %d\r\n", pre_encoder[0]);
+  }
+  if(encoder_ReadMotor(MOTOR_2) != pre_encoder[1]) {
+    pre_encoder[1] = encoder_ReadMotor(MOTOR_2);
+    printf("Current encoder 2 value = %d\r\n", pre_encoder[1]);
+  }
+  if(encoder_ReadMotor(MOTOR_3) != pre_encoder[2]) {
+    pre_encoder[2] = encoder_ReadMotor(MOTOR_3);
+    printf("Current encoder 3 value = %d\r\n", pre_encoder[2]);
+  }
+}
+
+
+
+
+
+/*****************************************************************************/
 /* IMU GY951 configuration function definition *******************************/
 /// @brief Initialize IMU GY951 by sending command
 ///        Data streaming is disable untill imu_StartIRQ is call
@@ -279,7 +297,7 @@ int motor_SetSpeed(MotorIndex motor_index, int value) {
 }
 
 /*****************************************************************************/
-/* Encoder control API function definition *************************************/
+/* Encoder control API function definition ***********************************/
 /// @brief Enable all encode/timer
 /*  Note: Reset all timer counter register and enable timer
 */
@@ -295,3 +313,34 @@ int encoder_Init(void) {
   init_timer_status += HAL_TIM_Encoder_Start(&htim8, TIM_CHANNEL_ALL);
   return init_timer_status;
 }
+
+int encoder_ReadMotor(MotorIndex motor_idx) {
+  static int32_t pos[3], pos_pre[3];
+  static int32_t d_pos[3], cur_pulse[3];
+
+  switch (motor_idx) {
+    case MOTOR_1:
+      pos[0] = (int32_t)TIM1->CNT;
+      break;
+    case MOTOR_2:
+      pos[1] = (int32_t)TIM4->CNT;
+      break;
+    case MOTOR_3:
+      pos[2] = (int32_t)TIM8->CNT;
+      break;
+    default:
+      printf("Error Motor index encoder read!");
+      break;
+  }
+  
+  d_pos[motor_idx] = pos[motor_idx] - pos_pre[motor_idx];
+  if (d_pos[motor_idx] > 32768) d_pos[motor_idx] -= 65536;
+  else if (d_pos[motor_idx] < -32768) d_pos[motor_idx] += 65536;
+  
+  pos_pre[motor_idx] = pos[motor_idx];
+  cur_pulse[motor_idx] += d_pos[motor_idx];
+  
+  return cur_pulse[motor_idx];
+}
+
+
