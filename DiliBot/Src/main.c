@@ -75,9 +75,7 @@ UART_HandleTypeDef huart5;
 DMA_HandleTypeDef hdma_uart5_rx;
 
 /* USER CODE BEGIN PV */
-uint8_t SPI_Buffer;
 float imu_value_f[3];
-uint8_t imu_value[12];
 int ms_tick_count = 0;
 /* USER CODE END PV */
 
@@ -108,15 +106,7 @@ static void MX_ADC1_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
-  // This uart buffer is used for both transmit and receive
-  uint8_t uart_buffer[50] = "Hello world\r\n";
-
-
-
-  SPI_Buffer = 0xD5;
-
-  int uart_status = 0;
+  int config_status = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -146,54 +136,17 @@ int main(void)
   MX_TIM4_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  SPI_DataSend(&SPI_Buffer, 1);
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
-  
-  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
-  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
-  
-  /* Encoder timer */
-  TIM1->CNT = 0;
-  HAL_TIM_Encoder_Start(&htim1, TIM_CHANNEL_ALL);
-
-  TIM4->CNT = 0;
-  HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);
-
-  TIM8->CNT = 0;
-  HAL_TIM_Encoder_Start(&htim8, TIM_CHANNEL_ALL);
+  // Init motor and encoder
+  config_status  = motor_Init();
+  config_status += encoder_Init();
+  if (config_status != 0) Error_Handler();
 
 
-  /* OK now we only have one uart 5 to communicate with IMU */
-
-  /* This is proto function for initialize IMU configuration */
-  snprintf((char*)uart_buffer, 4, "#o0");
-  uart_status = HAL_UART_Transmit(&huart5, uart_buffer, 3, 10);
-  if (uart_status != HAL_OK) {
-    Error_Handler();
-  }
-
-  HAL_Delay(500);
-  snprintf((char*)uart_buffer, 4, "#ob");
-  uart_status = HAL_UART_Transmit(&huart5, uart_buffer, 3, 10);
-  
-  snprintf((char*)uart_buffer, 3, "#f");
-  uart_status = HAL_UART_Transmit(&huart5, uart_buffer, 2, 10);
-  
-  if  (sizeof(float) != 4) Error_Handler();
-  
-  HAL_UART_Receive_DMA(&huart5, (uint8_t*)imu_value_f, 12);
-  
-  
-  
-  HAL_Delay(2000);
-  
-  snprintf((char*)uart_buffer, 4, "#o1");
-  uart_status = HAL_UART_Transmit(&huart5, uart_buffer, 3, 10);
-  
-  
-  
-  
+  /* Configurate IMU and start binary streaming */
+  /* Uncommand these three lines when we ready to read IMU */
+//  config_status  = imu_CmdInit();
+//  config_status += imu_StartIRQ(imu_value_f, 12);
+//  if (config_status != 0) Error_Handler();
   
   /* USER CODE END 2 */
 
@@ -204,12 +157,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    //HAL_UART_Receive_DMA(&huart1, imu_buffer, 50);
-    //HAL_UART_Receive(&huart1, imu_buffer, 50, 10);
-    
-    
+
     // Uncommand this line to check motor control API
     // This testing function already contant delay 500ms
+    // Do not call this function if IMU is connected !!!!!!!!!!!!!!11
+    //TEST_AllMotor();
     //TEST_Motor_API();
   }
   /* USER CODE END 3 */
@@ -637,13 +589,7 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 /* This is source code out of configuration **********************************/
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-  static int ms_pre_receive;
-  static int ms_measure;
-
   HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-
-  ms_measure = ms_tick_count - ms_pre_receive;
-  ms_pre_receive = ms_tick_count;
 }
 
 /* USER CODE END 4 */
@@ -656,7 +602,10 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
+  while(1) {
+    HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+    HAL_Delay(200);
+  }
   /* USER CODE END Error_Handler_Debug */
 }
 

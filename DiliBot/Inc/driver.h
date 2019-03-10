@@ -34,15 +34,21 @@ void SPI_DataSend(uint8_t *data, uint16_t size);
 
 void TEST_AllMotor(void);
 
+// Configuration
+int imu_CmdInit(void);
+int imu_StartIRQ(float *buffer, uint8_t size);
+
+
 /// API for motor control function delclaration
+int motor_Init(void);
 void motor_Disable(MotorIndex motor_index);
 void motor_DisableAll(void);
 void motor_Enable(MotorIndex motor_index);
 void motor_EnableAll(void);
-
 int motor_SetSpeed(MotorIndex motor_index, int value);
 
-
+/// API for encoder control function declaration
+int encoder_Init(void);
 
 
 void TEST_Motor_API(void);

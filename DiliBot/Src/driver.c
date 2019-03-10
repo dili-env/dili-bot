@@ -10,7 +10,8 @@ extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim8;
 extern UART_HandleTypeDef huart5;
-extern uint8_t SPI_Buffer;
+
+uint8_t SPI_Buffer;
 
 void SPI_DataSend(uint8_t *data, uint16_t size) {
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
@@ -35,7 +36,7 @@ void TEST_Motor_API(void) {
   uint32_t counter2 = 0;
   uint32_t counter3 = 0;
   uint8_t uart_buffer[50];
-  int tmp = 0;
+  static int tmp = 0;
 
   if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET) {
     counter1 = TIM1->CNT;
@@ -68,8 +69,87 @@ void TEST_Motor_API(void) {
   HAL_Delay(500);
 }
 
+/* IMU GY951 configuration function definition *******************************/
+/// @brief Initialize IMU GY951 by sending command
+///        Data streaming is disable untill imu_StartIRQ is call
+/// @ret Param assertion and HAL uart sending status
+///         - Normal return HAL_OK = 0
+///         - UART send problem return sum of HAL UART sending status (> 0)
+/*  Note: UART receive should not be activate at this time
+          Sending command procedure consist of:
+            - Disable streaming data '#o0'
+            - Setting data streaming output to binary mode '#ob'
+            - Send request one frame for test (Considering *FIXME)
+*/
+int imu_CmdInit(void) {
+  char uart_buffer[5];
+  int command_status = 0;
+  // Disable streaming output
+  snprintf(uart_buffer, 4, "#o0");
+  command_status += HAL_UART_Transmit(&huart5, (uint8_t*)uart_buffer, 3, 10);
+  // Delay for some garbage data stream
+  HAL_Delay(500);
+  // Setting binary mode output
+  snprintf(uart_buffer, 4, "#ob");
+  command_status += HAL_UART_Transmit(&huart5, (uint8_t*)uart_buffer, 3, 10);
+  // Request one frame (considering *FIXME)
+  snprintf(uart_buffer, 3, "#f");
+  command_status += HAL_UART_Transmit(&huart5, (uint8_t*)uart_buffer, 2, 10);
+  return command_status;
+}
 
+/// @brief Start IMU GY951 by sending command
+///        Enable data streaming (should be call after init command for imu)
+/// @param imu_buffer data receive buffer (3x float buffer)
+///        imu_size size of receive buffer must be 12 (3x float)
+/// @ret Param assertion and HAL uart sending status
+///         - Normal return HAL_OK = 0
+///         - Assert param false return -1
+///         - UART send problem return sum of HAL UART sending status (> 0)
+/*  Note: IMU must be configurate before calling this function
+          Buffer of this function is designed for binary data streaming
+          Start reanding IMU procedure consist of:
+            - Enable uart dma receive interrupt
+            - Start imu data streaming by sending '#o1'
+*/
+int imu_StartIRQ(float *imu_buffer, uint8_t imu_size) {
+  char uart_buffer[5];
+  int data_transfer_status = 0;
+  // Assert param and size of float
+  if ((imu_size != 12) || (sizeof(float) != 4)) return -1;
+  // Enable uart receive dma interrupt
+  data_transfer_status = 
+    HAL_UART_Receive_DMA(&huart5, (uint8_t*)imu_buffer, imu_size);
+  // Delay 0.5s
+  HAL_Delay(500);
+  // Start data streaming
+  snprintf((char*)uart_buffer, 4, "#o1");
+  data_transfer_status += 
+    HAL_UART_Transmit(&huart5, (uint8_t*)uart_buffer, 3, 10);
+  return data_transfer_status;
+}
+
+/*****************************************************************************/
 /* Motor control API function definition *************************************/
+
+/// @brief Initialize all motor (PWM init) and configurate control motor pin
+/// @return Init PWM timer status (zero mean OK, other than zero mean error)
+/*  Note: Initialize motor control pin following
+            - Enable all motor
+            - Set all motor direction to clockwise
+*/
+int motor_Init(void) {
+  int tim_start_status = 0;
+  // Initialize motor control pin
+  SPI_Buffer = 0xD5;
+  SPI_DataSend(&SPI_Buffer, 1);
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+  // Initialize all motor PWM
+  tim_start_status  = HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+  tim_start_status += HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+  tim_start_status += HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
+  return tim_start_status;
+}
 
 /// @brief Disable motor with specified motor index
 ///        This motor will not work untill it is enabled
@@ -196,4 +276,22 @@ int motor_SetSpeed(MotorIndex motor_index, int value) {
       break;
   }
   return ret;
+}
+
+/*****************************************************************************/
+/* Encoder control API function definition *************************************/
+/// @brief Enable all encode/timer
+/*  Note: Reset all timer counter register and enable timer
+*/
+int encoder_Init(void) {
+  int init_timer_status = 0;
+  TIM1->CNT = 0;
+  init_timer_status = HAL_TIM_Encoder_Start(&htim1, TIM_CHANNEL_ALL);
+
+  TIM4->CNT = 0;
+  init_timer_status += HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);
+
+  TIM8->CNT = 0;
+  init_timer_status += HAL_TIM_Encoder_Start(&htim8, TIM_CHANNEL_ALL);
+  return init_timer_status;
 }
