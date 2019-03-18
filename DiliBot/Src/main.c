@@ -44,6 +44,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "driver.h"
+#include "../Matlab/pid_my_ert_rtw/pid_my.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -78,13 +79,15 @@ DMA_HandleTypeDef hdma_uart5_rx;
 /* USER CODE BEGIN PV */
 float imu_value_f[3];
 int ms_tick_count = 0;
+uint8_t tick_5ms = 0;
+static boolean_T OverrunFlag = 0;
+int16_t udk, i;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
-static void MX_SPI1_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_TIM8_Init(void);
 static void MX_UART5_Init(void);
@@ -92,13 +95,39 @@ static void MX_TIM2_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_UART4_Init(void);
+static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void rt_OneStep(void)
+{
+  /* Disable interrupts here */
 
+  /* Check for overrun */
+  if (OverrunFlag++) {
+    rtmSetErrorStatus(pid_my_M, "Overrun");
+    return;
+  }
+
+  /* Save FPU context here (if necessary) */
+  /* Re-enable timer or interrupt here */
+  /* Set model inputs here */
+
+  /* Step the model */
+  pid_my_step();
+
+  /* Get model outputs here */
+
+  /* Indicate task complete */
+  OverrunFlag--;
+
+  /* Disable interrupts here */
+  /* Restore FPU context here (if necessary) */
+  /* Enable interrupts here */
+}
 /* USER CODE END 0 */
 
 /**
@@ -109,7 +138,9 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
   int config_status = 0;
-
+  int8_t start = 0;
+  uint8_t buff[5];
+  MotorIndex motor_running = MOTOR_NONE;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -131,7 +162,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_SPI1_Init();
   MX_TIM1_Init();
   MX_TIM8_Init();
   MX_UART5_Init();
@@ -139,21 +169,26 @@ int main(void)
   MX_TIM4_Init();
   MX_ADC1_Init();
   MX_UART4_Init();
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
   // Dili-Bot hello world and checking debug message
   printf("Dili-Bot Hello World %d ^^\r\n", 2019);
-
+  HAL_Delay(3000);
   // Initialize motor and encoder
   config_status  = motor_Init();
   config_status += encoder_Init();
   if (config_status != 0) Error_Handler();
-
+  motor_DisableAll();
+  HAL_Delay(500);
   /* Configurate IMU and start binary streaming */
   /* Uncommand these three lines when we ready to read IMU */
   config_status  = imu_CmdInit();
   config_status += imu_StartIRQ(imu_value_f, 12);
   if (config_status != 0) Error_Handler();
   /* Start IMU should be the final configuration => Not thing else and start */
+   pid_my_initialize();
+
+   motor_EnableAll();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -162,9 +197,58 @@ int main(void)
   {
     // Uncommand this line to check motor control API
     // This testing function already contant delay 500ms
-    TEST_AllMotor();
-    TEST_Motor_API();
+    //TEST_AllMotor();
+    //TEST_Motor_API();
     TEST_Encoder_API();
+    
+//    motor_SetSpeed(MOTOR_1, 200);
+//    motor_SetSpeed(MOTOR_2, 200);
+//    HAL_Delay(500);
+//    motor_SetSpeed(MOTOR_1, -200);
+//    motor_SetSpeed(MOTOR_2, -200);
+//    HAL_Delay(500);
+    
+    HAL_UART_Receive(&huart4, buff, 1, 1);
+    if (buff[0] == 'a') start = 0;
+    else if (buff[0] == 'b') start = 1;
+    else if (buff[0] == 'c') start = 2;
+    else if (buff[0] == 'r') start = 9;
+    else if (buff[0] == 's') start = -1;
+    else if (buff[0] == 'f') start = -9;
+    else start = -99;
+    // Check PID matlab code gen
+    if (start >= 0 && start != 9) {
+      motor_running = (MotorIndex)start;
+      if (tick_5ms == 1) {
+        tick_5ms = 0;
+        In2 = (double)encoder_ReadMotor(motor_running);
+        rt_OneStep();
+        Out1 = Out1*800/12;
+        udk = (int)Out1;
+        motor_SetSpeed(motor_running, udk);
+      }
+    }
+      //motor_SetSpeed(MOTOR_1, 300);
+    else if (start == -1) {
+      if (motor_running != MOTOR_NONE)
+        motor_SetSpeed(motor_running, 0);
+      else
+        printf("No motor running, can't stop anything :)\n");
+    }
+    else if (start == -9)
+      motor_DisableAll();
+    else if (start == 9)
+      motor_EnableAll();
+    else { // start == -99
+      motor_SetSpeed(MOTOR_1, 0);
+      HAL_Delay(20);
+      motor_SetSpeed(MOTOR_2, 0);
+      HAL_Delay(20);
+      motor_SetSpeed(MOTOR_3, 0);
+    }
+    
+    
+    
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -620,6 +704,7 @@ static void MX_GPIO_Init(void)
 /* This is source code out of configuration **********************************/
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
   HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
+  printf("IMU: %f, %f, %f\r\n", imu_value_f[0], imu_value_f[1], imu_value_f[2]);
 }
 
 /* USER CODE END 4 */

@@ -59,6 +59,7 @@
 /* USER CODE BEGIN PV */
 extern uint8_t imu_buffer[50];
 extern int ms_tick_count;
+extern uint8_t tick_5ms;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -202,8 +203,10 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
-  if (ms_tick_count >= 1000)
+  if (ms_tick_count == 5) {
     ms_tick_count = 0;
+    tick_5ms = 1;
+  }
   /* USER CODE END SysTick_IRQn 1 */
 }
 

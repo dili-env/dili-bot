@@ -10,7 +10,8 @@
 typedef enum {
   MOTOR_1 = 0,
   MOTOR_2,
-  MOTOR_3
+  MOTOR_3,
+  MOTOR_NONE = 9
 } MotorIndex;
 
 typedef enum {

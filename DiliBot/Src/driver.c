@@ -196,6 +196,9 @@ void motor_Disable(MotorIndex motor_index) {
 /// @brief Disable all motor (1,2,3)
 /// @param none
 void motor_DisableAll(void) {
+  motor_SetSpeed(MOTOR_1, 0);
+  motor_SetSpeed(MOTOR_2, 0);
+  motor_SetSpeed(MOTOR_3, 0);
   SPI_Buffer &= ~(BIT_EN1|BIT_EN2);
   SPI_DataSend(&SPI_Buffer, 1);
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
@@ -230,6 +233,9 @@ void motor_EnableAll(void) {
   SPI_Buffer |= (BIT_EN1|BIT_EN2);
   SPI_DataSend(&SPI_Buffer, 1);
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+  motor_SetSpeed(MOTOR_1, 0);
+  motor_SetSpeed(MOTOR_2, 0);
+  motor_SetSpeed(MOTOR_3, 0);
 }
 
 /// @brief Set speed for specified motor (from -999 to 999)
@@ -290,6 +296,7 @@ int motor_SetSpeed(MotorIndex motor_index, int value) {
       __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, value);
       break;
     default:
+      printf("Error motor index in setting speed!");
       ret = -1;
       break;
   }
