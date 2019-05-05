@@ -9,6 +9,8 @@ typedef enum {
   SYSTEM_CHECK_CMD,
   SYSTEM_CALIB_SENSOR,
   SYSTEM_BALANCE, /* TODO: This state will be removed if robot can self-balance */
+  SYSTEM_SEND_DATA,
+  SYSTEM_HALT
 } SYSTEM_STATE;
 
 void system_processSystemState(void);

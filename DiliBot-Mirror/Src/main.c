@@ -43,14 +43,17 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <math.h>
+#include <string.h>
+
 #include "timer.h"
 #include "app.h"
 #include "driver.h"
-#include "balancing.h"
-#include "calib_sensor.h"
-#include "driver_util.h"
+
+//#include "balancing.h"
+//#include "calib_sensor.h"
+#include "dilibot.h"
 #include "../Matlab/pid_my_ert_rtw/pid_my.h"
-#include <math.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -60,7 +63,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+//#define LOG_SYSTEM       1
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -81,19 +84,15 @@ TIM_HandleTypeDef htim8;
 
 UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart5;
+DMA_HandleTypeDef hdma_uart4_tx;
 DMA_HandleTypeDef hdma_uart5_rx;
 
 /* USER CODE BEGIN PV */
-float imu_value_f[3];
-float imu_value_rad[3];
-float pitch_y, raw_x, yaw_z;
-int ms_tick_count = 0;
-// #test
-uint32_t test_count = 0;
-// #test
-uint8_t tick_5ms = 0;
-static boolean_T OverrunFlag = 0;
-int16_t udk, i;
+float imu_value_f[3]; /* IMU data buffer */
+// #TEST Tick 1ms and 5ms count
+uint32_t ms1_tick_count = 0; /* Count each 1ms from 0 -> 4*/
+uint32_t ms5_tick_count = 0; /* Count each 5ms */
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -110,37 +109,59 @@ static void MX_UART4_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_I2C3_Init(void);
 /* USER CODE BEGIN PFP */
-
+void PID_MotorTestProcess(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void rt_OneStep(void)
-{
-  /* Disable interrupts here */
 
-  /* Check for overrun */
-  if (OverrunFlag++) {
-    rtmSetErrorStatus(pid_my_M, "Overrun");
-    return;
+void PID_MotorTestProcess(void) {
+  uint8_t buff[20];
+  int8_t start;
+  uint8_t error_msg_buff[45] = "No motor running, can't stop anything :)\n";
+  MotorIndex motor_running;
+  int udk;
+  static uint32_t tick_5ms;
+  
+  HAL_UART_Receive(&huart4, buff, 1, 1);
+  if (buff[0] == 'a') start = 0;
+  else if (buff[0] == 'b') start = 1;
+  else if (buff[0] == 'c') start = 2;
+  else if (buff[0] == 'r') start = 9;
+  else if (buff[0] == 's') start = -1;
+  else if (buff[0] == 'f') start = -9;
+  else start = -99;
+  // Check PID matlab code gen
+  if (start >= 0 && start != 9) {
+    motor_running = (MotorIndex)start;
+    if (tick_5ms != ms5_tick_count) {
+      tick_5ms = ms5_tick_count;
+      In2 = (double)encoder_ReadMotor(motor_running);
+      // rt_OneStep();
+      Out1 = Out1*800/12;
+      udk = (int)Out1;
+      motor_SetSpeed(motor_running, udk);
+    }
   }
-
-  /* Save FPU context here (if necessary) */
-  /* Re-enable timer or interrupt here */
-  /* Set model inputs here */
-
-  /* Step the model */
-  pid_my_step();
-
-  /* Get model outputs here */
-
-  /* Indicate task complete */
-  OverrunFlag--;
-
-  /* Disable interrupts here */
-  /* Restore FPU context here (if necessary) */
-  /* Enable interrupts here */
+  else if (start == -1) {
+    if (motor_running != MOTOR_NONE)
+      motor_SetSpeed(motor_running, 0);
+    else
+      dma_printf(error_msg_buff, 44);
+  }
+  else if (start == -9)
+    motor_DisableAll();
+  else if (start == 9)
+    motor_EnableAll();
+  else { // start == -99
+    motor_SetSpeed(MOTOR_1, 0);
+    HAL_Delay(20);
+    motor_SetSpeed(MOTOR_2, 0);
+    HAL_Delay(20);
+    motor_SetSpeed(MOTOR_3, 0);
+  }
 }
+
 /* USER CODE END 0 */
 
 /**
@@ -150,11 +171,8 @@ void rt_OneStep(void)
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  uint8_t buff_tmp[12] = "Hello Dili\n";
   int config_status = 0;
-  int8_t start = 0;
-  uint8_t buff[5];
-  MotorIndex motor_running = MOTOR_NONE;
+  uint8_t hello_buff[31] = "Dili-Bot Hello World 2019 ^^\r\n";
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -186,38 +204,38 @@ int main(void)
   MX_TIM6_Init();
   MX_I2C3_Init();
   /* USER CODE BEGIN 2 */
-  // Dili-Bot hello world and checking debug message
-  // HAL_UART_Transmit_DMA(&huart4, buff_tmp, 12);
-  debug_printf("Dili-Bot Hello World %d ^^\r\n", 2019);
-  printf("Dili-Bot Hello World %d ^^\r\n", 2019);
-  HAL_Delay(300);
-  debug_printf("Hello again\r\n");
-  HAL_Delay(300);
-  debug_printf("Hello again %d\r\n", 234);
-  // Initialize motor and encoder
+  
+  /// Dili-Bot hello world and checking debug message
+  HAL_UART_Transmit_DMA(&huart4, (uint8_t*)hello_buff, strlen((char*)hello_buff));
+  /// Initialize motor and encoder
   config_status  = motor_Init();
   config_status += encoder_Init();
   if (config_status != 0) Error_Handler();
   motor_DisableAll();
   HAL_Delay(500);
-  /* Configurate IMU and start binary streaming */
-  /* Uncommand these three lines when we ready to read IMU */
+  /// Configurate IMU and start binary streaming
+  /// Uncommand these three lines when we ready to read IMU
   config_status  = imu_CmdInit();
   config_status += imu_StartIRQ(imu_value_f, 12);
   if (config_status != 0) Error_Handler();
-  /* Start IMU should be the final configuration => Not thing else and start */
-   pid_my_initialize();
-
-   motor_EnableAll();
   
+  /// PID initialization
+  // TODO: This is for test
+  pid_my_initialize();
+  
+  /// Start system timer tick
   HAL_TIM_Base_Start_IT(&htim6);
-  
-  ballbot_balanceInit();
-  
-  sensor_calibInit();
-  
-  // printf("Cos(1') = %.04f", cos(30*3.14156/180));
-//motor_Enable(MOTOR_2);
+//  /// Initialize sensor process and register sensor event
+//  sensor_calibInit();
+//  /// Initialize ballbot balance and register balance process event
+//  ballbot_balanceInit();
+  /// One process dilibot
+  if (0 != dilibot_sensorCalibInit()) {
+    Error_Handler();
+  }
+  /// Enable all motor
+  motor_EnableAll();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -225,88 +243,7 @@ int main(void)
   while (1)
   {
     // Uncommand this line to check motor control API
-    // This testing function already contant delay 500ms
-    //TEST_AllMotor();
-    //TEST_Motor_API();
-    //TEST_Encoder_API();
-    
-//    motor_SetSpeed(MOTOR_2, 200);
-////    motor_SetSpeed(MOTOR_2, 200);
-//    HAL_Delay(1000);
-//    
-//    motor_SetSpeed(MOTOR_2, 0);
-//    HAL_Delay(100);
-//    
-//    motor_SetSpeed(MOTOR_2, -200);
-////    motor_SetSpeed(MOTOR_2, -200);
-//    HAL_Delay(1000);
-//    
-//    motor_SetSpeed(MOTOR_2, 0);
-//    HAL_Delay(100);
-
-//    motor_SetSpeed(MOTOR_1, 200);
-    
-
-    // Code work 
-/*
-
-    HAL_UART_Receive(&huart4, buff, 1, 1);
-    if (buff[0] == 'a') start = 0;
-    else if (buff[0] == 'b') start = 1;
-    else if (buff[0] == 'c') start = 2;
-    else if (buff[0] == 'r') start = 9;
-    else if (buff[0] == 's') start = -1;
-    else if (buff[0] == 'f') start = -9;
-    else if (buff[0] == 'e') start = -10;
-    else start = -99;
-    // Check PID matlab code gen
-    if (start >= 0 && start != 9) {
-      motor_running = (MotorIndex)start;
-      if (tick_5ms == 1) {
-        tick_5ms = 0;
-        In2 = (double)encoder_ReadMotor(motor_running);
-        rt_OneStep();
-        Out1 = Out1*800/12;
-        udk = (int)Out1;
-        motor_SetSpeed(motor_running, udk);
-      }
-    }
-    else if (start == -10) {
-      // System state estimation
-      
-      
-      if (tick_5ms == 1) {
-        tick_5ms = 0;
-        //simple_control_LQR();
-        sliding_control();
-      }
-    }
-    else if (start == -1) {
-      if (motor_running != MOTOR_NONE)
-        motor_SetSpeed(motor_running, 0);
-      else
-        printf("No motor running, can't stop anything :)\n");
-    }
-    else if (start == -9)
-      motor_DisableAll();
-    else if (start == 9)
-      motor_EnableAll();
-    else { // start == -99
-      motor_SetSpeed(MOTOR_1, 0);
-      HAL_Delay(20);
-      motor_SetSpeed(MOTOR_2, 0);
-      HAL_Delay(20);
-      motor_SetSpeed(MOTOR_3, 0);
-    }
-
-    // end code work
-    
-//    if (tick_5ms == 1) {
-//      tick_5ms = 0;
-//      simple_control_LQR();
-//    }
-*/
-
+    // PID_MotorTestProcess();
     system_processSystemState();
 
     /* USER CODE END WHILE */
@@ -510,7 +447,7 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 2;
+  htim2.Init.Prescaler = 83;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 1000;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -759,6 +696,9 @@ static void MX_DMA_Init(void)
   /* DMA1_Stream0_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream0_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);
+  /* DMA1_Stream4_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream4_IRQn);
 
 }
 
@@ -823,63 +763,24 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 /* This is source code out of configuration **********************************/
-
-void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart) {
-  // TODO:
-  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-  // UART_EndTxTransfer(&huart4);
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
+  //HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
 }
 
-//void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
-//  // TODO:
-//  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-//  // UART_EndTxTransfer(&huart4);
-//}
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-  // HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-
-  // calibrate value
-  // Yaw Pitch Row
-  raw_x = (imu_value_f[2] - 1.66f)  * 3.141592f / 180.0f;
-  pitch_y = (imu_value_f[1] - 3.3f) * 3.141592f / 180.0f;
-  yaw_z = (imu_value_f[0]) *  3.141592f / 180.0f;
-
-  //printf("IMU: %.4f, %.4f, %.4f\r\n", imu_value_rad[0], imu_value_rad[1], imu_value_rad[2]);
+  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
 }
-
-
-
-
 
 /// @brief Timer6 application tick service routine
 /// @param htim Pointer to timer handling, now we take care of timer 6 handle
 //  *Note:  Timer 6 configurate to tick each 1/10 ms
 //          If we need an 5ms -> set up 50 ticks
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-  static int count = 0;
   if (TIM6 == htim->Instance) {
     TIMER_ISR();
-    /* Test 1/10 ms tick
-        Count up 10.000 ticks and toggle LED
-        Check timer by hand
-     */
-//    if (count == 10000) {
-//      count = 0;
-//      HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-//    }
   }
 }
-
-
-
-
-
-
-
-
-
-
 
 /* USER CODE END 4 */
 

@@ -10,7 +10,7 @@ Tgyro = readtable('gyro_2.xlsx');
 
 %% Plot raw data
 t= Tgyro.t;
-gx = Tgyro.gyro_x*180/pi/250;
+gx = Tgyro.gyro_x*180/pi;
 ax = Tgyro.angle_x*180/pi;
 % Raw gyro_x data
 figure('name','Raw data');

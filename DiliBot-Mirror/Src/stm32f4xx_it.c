@@ -58,11 +58,9 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 extern uint8_t imu_buffer[50];
-extern int ms_tick_count;
-// #test
-extern uint32_t test_count;
-// #test
-extern uint8_t tick_5ms;
+// #Test
+extern uint32_t ms1_tick_count;
+extern uint32_t ms5_tick_count;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -77,6 +75,7 @@ extern uint8_t tick_5ms;
 
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim6;
+extern DMA_HandleTypeDef hdma_uart4_tx;
 extern DMA_HandleTypeDef hdma_uart5_rx;
 extern UART_HandleTypeDef huart4;
 /* USER CODE BEGIN EV */
@@ -204,16 +203,13 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-  ms_tick_count++;
+  ms1_tick_count++;
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
-  if (ms_tick_count == 5) {
-    ms_tick_count = 0;
-    // #test
-    test_count++;
-    // #test
-    tick_5ms = 1;
+  if (ms1_tick_count == 5) {
+    ms1_tick_count = 0;
+    ms5_tick_count++;
   }
   /* USER CODE END SysTick_IRQn 1 */
 }
@@ -237,6 +233,20 @@ void DMA1_Stream0_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Stream0_IRQn 1 */
 
   /* USER CODE END DMA1_Stream0_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 stream4 global interrupt.
+  */
+void DMA1_Stream4_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream4_IRQn 0 */
+
+  /* USER CODE END DMA1_Stream4_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_uart4_tx);
+  /* USER CODE BEGIN DMA1_Stream4_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream4_IRQn 1 */
 }
 
 /**

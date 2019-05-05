@@ -13,8 +13,8 @@ extern UART_HandleTypeDef huart5;
 
 /// @brief Retarget the C library function to UART
 PUTCHAR_PROTOTYPE {
-  HAL_UART_Transmit(&huart4, (uint8_t*)&ch, 1, 10);
-  return ch;
+//  HAL_UART_Transmit(&huart4, (uint8_t*)&ch, 1, 10);
+//  return ch;
 }
 
 void debug_printf(const char *fmt, ...) // custom printf() function
@@ -32,7 +32,7 @@ void debug_printf(const char *fmt, ...) // custom printf() function
 
 
 void dma_printf(uint8_t *buff_ptr, uint16_t buff_size) {
-//  HAL_UART_Transmit_DMA(&huart4, buff_ptr, buff_size);
+  HAL_UART_Transmit_DMA(&huart4, buff_ptr, buff_size);
 }
 
 

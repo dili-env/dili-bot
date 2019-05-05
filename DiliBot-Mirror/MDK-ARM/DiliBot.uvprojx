@@ -334,9 +334,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_HAL_DRIVER,STM32F407xx</Define>
+              <Define>USE_HAL_DRIVER,STM32F407xx,LOG_SYSTEM</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc; ../Drivers/STM32F4xx_HAL_Driver/Inc; ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy; ../Drivers/CMSIS/Device/ST/STM32F4xx/Include; ../Drivers/CMSIS/Include; ..\ThirdParty\inc</IncludePath>
+              <IncludePath>../Inc;      ../Drivers/STM32F4xx_HAL_Driver/Inc;      ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;      ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;      ../Drivers/CMSIS/Include;      ..\ThirdParty\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -396,11 +396,6 @@
               <FilePath>..\Src\driver.c</FilePath>
             </File>
             <File>
-              <FileName>driver_util.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\driver_util.c</FilePath>
-            </File>
-            <File>
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\timer.c</FilePath>
@@ -409,11 +404,6 @@
               <FileName>app.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\app.c</FilePath>
-            </File>
-            <File>
-              <FileName>balancing.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\balancing.c</FilePath>
             </File>
             <File>
               <FileName>main.c</FileName>
@@ -431,9 +421,9 @@
               <FilePath>../Src/stm32f4xx_hal_msp.c</FilePath>
             </File>
             <File>
-              <FileName>calib_sensor.c</FileName>
+              <FileName>dililbot.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\calib_sensor.c</FilePath>
+              <FilePath>..\Src\dililbot.c</FilePath>
             </File>
           </Files>
         </Group>

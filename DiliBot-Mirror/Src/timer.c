@@ -34,9 +34,9 @@ void TIMER_ISR(void) {
 /// @param tenth_ms number of tenth of one ms
 /// @return Timer event ID valid (from 0 -> 9) or invalid (0xff)
 TIMER_ID TIMER_RegisterEvent(TIMER_CALLBACK_FUNC callback, unsigned long tenth_of_ms) {
-  int i = 0;
+  int i;
   /// Find valid timer id for registration
-  for (int i = 0; i < MAX_TIMEOUT_EVT; i++) {
+  for (i = 0; i < MAX_TIMEOUT_EVT; i++) {
     if ((timer_event_list[i].period_cnt == 0) && 
         (timer_event_list[i].callback == NULL)) break;
   }
