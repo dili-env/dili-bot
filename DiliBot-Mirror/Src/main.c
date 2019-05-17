@@ -213,11 +213,6 @@ int main(void)
   if (config_status != 0) Error_Handler();
   motor_DisableAll();
   HAL_Delay(500);
-  /// Configurate IMU and start binary streaming
-  /// Uncommand these three lines when we ready to read IMU
-  config_status  = imu_CmdInit();
-  config_status += imu_StartIRQ(imu_value_f, 12);
-  if (config_status != 0) Error_Handler();
   
   /// PID initialization
   // TODO: This is for test
@@ -235,7 +230,11 @@ int main(void)
   }
   /// Enable all motor
   motor_EnableAll();
-
+  /// Configurate IMU and start binary streaming
+  /// Uncommand these three lines when we ready to read IMU
+  config_status  = imu_CmdInit();
+  config_status += imu_StartIRQ(imu_value_f, 12);
+  if (config_status != 0) Error_Handler();
   /* USER CODE END 2 */
 
   /* Infinite loop */
