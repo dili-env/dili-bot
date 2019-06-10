@@ -1,0 +1,221 @@
+<HTML>
+<HEAD>
+<TITLE>RTW Report - rtwtypes.h </TITLE>
+<STYLE> .LN { font-style: italic; color: #888888 } </STYLE>
+<STYLE> .CT { font-style: italic; color: #117755 } </STYLE>
+<STYLE> .PP { font-style: bold;   color: #992211 } </STYLE>
+<STYLE> .KW { font-style: bold;   color: #112266 } </STYLE>
+<STYLE> .DT { font-style: bold;   color: #112266 } </STYLE>
+<SCRIPT language="JavaScript" type="text/javascript">
+<!--
+function rtwHilite(aBlock,aSsid) {
+    if (!aSsid) { aSsid = ""; }
+    window.location.href="matlab: if ~isempty(which('private/rtwbindmodel')), rtwprivate rtwbindmodel 'D:\\01_Ph_D\\dili-bot\\DiliBot\\Matlab\\pid_my.mdl' 'D:\\01_Ph_D\\dili-bot\\DiliBot\\Matlab\\pid_my_ert_rtw' '', end; rtwprivate code2model "+aBlock+" "+aSsid+";"
+} // end rtwHilite
+//-->
+</SCRIPT>
+</HEAD>
+<BODY BGCOLOR="#eeeeee" TEXT="#1122aa" ONLOAD="if (top) if (top.rtwFileOnLoad) top.rtwFileOnLoad(window);">
+<P>
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="6" WIDTH="100%" HEIGHT="100%"><TR><TD WIDTH="100%" VALIGN="top" BGCOLOR="#ffffff">
+<H4>File: <A HREF="file:///D:\01_Ph_D\dili-bot\DiliBot\Matlab\pid_my_ert_rtw\rtwtypes.h" TARGET="rtwreport_document_frame">D:\01_Ph_D\dili-bot\DiliBot\Matlab\pid_my_ert_rtw\rtwtypes.h</A></H4>
+<PRE id="RTWcode">
+<SPAN><SPAN CLASS="LN"><A NAME="1">    1   </A></SPAN><SPAN CLASS="CT">/*</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    2   </SPAN><SPAN CLASS="CT"> * File: rtwtypes.h</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    3   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    4   </SPAN><SPAN CLASS="CT"> * Definitions required by Real-Time Workshop generated code.</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    5   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    6   </SPAN><SPAN CLASS="CT"> * Real-Time Workshop version: 7.4</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    7   </SPAN><SPAN CLASS="CT"> * Generated on: 2019-03-10 22:36:03</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    8   </SPAN><SPAN CLASS="CT"> */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    9   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   10   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">ifndef</SPAN> __RTWTYPES_H__
+</SPAN><SPAN><SPAN CLASS="LN">   11   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> __RTWTYPES_H__
+</SPAN><SPAN><SPAN CLASS="LN">   12   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">ifndef</SPAN> TRUE
+</SPAN><SPAN><SPAN CLASS="LN">   13   </SPAN><FONT COLOR="#992211">#</FONT> <SPAN CLASS="PP">define</SPAN> TRUE                          (1U)
+</SPAN><SPAN><SPAN CLASS="LN">   14   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">endif</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   15   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   16   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">ifndef</SPAN> FALSE
+</SPAN><SPAN><SPAN CLASS="LN">   17   </SPAN><FONT COLOR="#992211">#</FONT> <SPAN CLASS="PP">define</SPAN> FALSE                         (0U)
+</SPAN><SPAN><SPAN CLASS="LN">   18   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">endif</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   19   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   20   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">ifndef</SPAN> __TMWTYPES__
+</SPAN><SPAN><SPAN CLASS="LN">   21   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> __TMWTYPES__
+</SPAN><SPAN><SPAN CLASS="LN">   22   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">include</SPAN> <FONT COLOR="#992211">&lt;limits.h&gt;</FONT>
+</SPAN><SPAN><SPAN CLASS="LN">   23   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   24   </SPAN><SPAN CLASS="CT">/*=======================================================================*</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   25   </SPAN><SPAN CLASS="CT"> * Target hardware information</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   26   </SPAN><SPAN CLASS="CT"> *   Device type: 32-bit Generic</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   27   </SPAN><SPAN CLASS="CT"> *   Number of bits:     char:   8    short:   16    int:  32</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   28   </SPAN><SPAN CLASS="CT"> *                       long:  32      native word size:  32</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   29   </SPAN><SPAN CLASS="CT"> *   Byte ordering: Unspecified</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   30   </SPAN><SPAN CLASS="CT"> *   Signed integer division rounds to: Undefined</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   31   </SPAN><SPAN CLASS="CT"> *   Shift right on a signed integer as arithmetic shift: on</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   32   </SPAN><SPAN CLASS="CT"> *=======================================================================*/</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   33   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   34   </SPAN><SPAN CLASS="CT">/*=======================================================================*</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   35   </SPAN><SPAN CLASS="CT"> * Fixed width word size data types:                                     *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   36   </SPAN><SPAN CLASS="CT"> *   int8_T, int16_T, int32_T     - signed 8, 16, or 32 bit integers     *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   37   </SPAN><SPAN CLASS="CT"> *   uint8_T, uint16_T, uint32_T  - unsigned 8, 16, or 32 bit integers   *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   38   </SPAN><SPAN CLASS="CT"> *   real32_T, real64_T           - 32 and 64 bit floating point numbers *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   39   </SPAN><SPAN CLASS="CT"> *=======================================================================*/</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   40   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">signed</SPAN> <SPAN CLASS="DT">char</SPAN> <A NAME="type_int8_T">int8_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   41   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">unsigned</SPAN> <SPAN CLASS="DT">char</SPAN> <A NAME="type_uint8_T">uint8_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   42   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">short</SPAN> <A NAME="type_int16_T">int16_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   43   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">unsigned</SPAN> <SPAN CLASS="DT">short</SPAN> <A NAME="type_uint16_T">uint16_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   44   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">int</SPAN> <A NAME="type_int32_T">int32_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   45   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">unsigned</SPAN> <SPAN CLASS="DT">int</SPAN> <A NAME="type_uint32_T">uint32_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   46   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">float</SPAN> <A NAME="type_real32_T">real32_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   47   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">double</SPAN> <A NAME="type_real64_T">real64_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   48   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   49   </SPAN><SPAN CLASS="CT">/*===========================================================================*</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   50   </SPAN><SPAN CLASS="CT"> * Generic type definitions: real_T, time_T, boolean_T, int_T, uint_T,       *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   51   </SPAN><SPAN CLASS="CT"> *                           ulong_T, char_T and byte_T.                     *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   52   </SPAN><SPAN CLASS="CT"> *===========================================================================*/</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   53   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">double</SPAN> <A NAME="type_real_T">real_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   54   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">double</SPAN> <A NAME="type_time_T">time_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   55   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">unsigned</SPAN> <SPAN CLASS="DT">char</SPAN> <A NAME="type_boolean_T">boolean_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   56   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">int</SPAN> <A NAME="type_int_T">int_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   57   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">unsigned</SPAN> <SPAN CLASS="DT">int</SPAN> <A NAME="type_uint_T">uint_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   58   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">unsigned</SPAN> <SPAN CLASS="DT">long</SPAN> <A NAME="type_ulong_T">ulong_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   59   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">char</SPAN> <A NAME="type_char_T">char_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   60   </SPAN><SPAN CLASS="KW">typedef</SPAN> <A HREF="rtwtypes_h.html#type_char_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_char_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">char_T</FONT></A> <A NAME="type_byte_T">byte_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   61   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   62   </SPAN><SPAN CLASS="CT">/*===========================================================================*</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   63   </SPAN><SPAN CLASS="CT"> * Complex number type definitions                                           *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   64   </SPAN><SPAN CLASS="CT"> *===========================================================================*/</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   65   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> CREAL_T
+</SPAN><SPAN><SPAN CLASS="LN">   66   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   67   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="KW">struct</SPAN> <B>{</B>
+</SPAN><SPAN><SPAN CLASS="LN">   68   </SPAN>  <A HREF="rtwtypes_h.html#type_real32_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real32_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real32_T</FONT></A> re;
+</SPAN><SPAN><SPAN CLASS="LN">   69   </SPAN>  <A HREF="rtwtypes_h.html#type_real32_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real32_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real32_T</FONT></A> im;
+</SPAN><SPAN><SPAN CLASS="LN">   70   </SPAN><B>}</B> <A NAME="type_creal32_T">creal32_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   71   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   72   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="KW">struct</SPAN> <B>{</B>
+</SPAN><SPAN><SPAN CLASS="LN">   73   </SPAN>  <A HREF="rtwtypes_h.html#type_real64_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real64_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real64_T</FONT></A> re;
+</SPAN><SPAN><SPAN CLASS="LN">   74   </SPAN>  <A HREF="rtwtypes_h.html#type_real64_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real64_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real64_T</FONT></A> im;
+</SPAN><SPAN><SPAN CLASS="LN">   75   </SPAN><B>}</B> <A NAME="type_creal64_T">creal64_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   76   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   77   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="KW">struct</SPAN> <B>{</B>
+</SPAN><SPAN><SPAN CLASS="LN">   78   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> re;
+</SPAN><SPAN><SPAN CLASS="LN">   79   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> im;
+</SPAN><SPAN><SPAN CLASS="LN">   80   </SPAN><B>}</B> <A NAME="type_creal_T">creal_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   81   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   82   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="KW">struct</SPAN> <B>{</B>
+</SPAN><SPAN><SPAN CLASS="LN">   83   </SPAN>  <A HREF="rtwtypes_h.html#type_int8_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_int8_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">int8_T</FONT></A> re;
+</SPAN><SPAN><SPAN CLASS="LN">   84   </SPAN>  <A HREF="rtwtypes_h.html#type_int8_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_int8_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">int8_T</FONT></A> im;
+</SPAN><SPAN><SPAN CLASS="LN">   85   </SPAN><B>}</B> <A NAME="type_cint8_T">cint8_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   86   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   87   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="KW">struct</SPAN> <B>{</B>
+</SPAN><SPAN><SPAN CLASS="LN">   88   </SPAN>  <A HREF="rtwtypes_h.html#type_uint8_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint8_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">uint8_T</FONT></A> re;
+</SPAN><SPAN><SPAN CLASS="LN">   89   </SPAN>  <A HREF="rtwtypes_h.html#type_uint8_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint8_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">uint8_T</FONT></A> im;
+</SPAN><SPAN><SPAN CLASS="LN">   90   </SPAN><B>}</B> <A NAME="type_cuint8_T">cuint8_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   91   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   92   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="KW">struct</SPAN> <B>{</B>
+</SPAN><SPAN><SPAN CLASS="LN">   93   </SPAN>  <A HREF="rtwtypes_h.html#type_int16_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_int16_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">int16_T</FONT></A> re;
+</SPAN><SPAN><SPAN CLASS="LN">   94   </SPAN>  <A HREF="rtwtypes_h.html#type_int16_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_int16_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">int16_T</FONT></A> im;
+</SPAN><SPAN><SPAN CLASS="LN">   95   </SPAN><B>}</B> <A NAME="type_cint16_T">cint16_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   96   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   97   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="KW">struct</SPAN> <B>{</B>
+</SPAN><SPAN><SPAN CLASS="LN">   98   </SPAN>  <A HREF="rtwtypes_h.html#type_uint16_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint16_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">uint16_T</FONT></A> re;
+</SPAN><SPAN><SPAN CLASS="LN">   99   </SPAN>  <A HREF="rtwtypes_h.html#type_uint16_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint16_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">uint16_T</FONT></A> im;
+</SPAN><SPAN><SPAN CLASS="LN">  100   </SPAN><B>}</B> <A NAME="type_cuint16_T">cuint16_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">  101   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  102   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="KW">struct</SPAN> <B>{</B>
+</SPAN><SPAN><SPAN CLASS="LN">  103   </SPAN>  <A HREF="rtwtypes_h.html#type_int32_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_int32_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">int32_T</FONT></A> re;
+</SPAN><SPAN><SPAN CLASS="LN">  104   </SPAN>  <A HREF="rtwtypes_h.html#type_int32_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_int32_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">int32_T</FONT></A> im;
+</SPAN><SPAN><SPAN CLASS="LN">  105   </SPAN><B>}</B> <A NAME="type_cint32_T">cint32_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">  106   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  107   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="KW">struct</SPAN> <B>{</B>
+</SPAN><SPAN><SPAN CLASS="LN">  108   </SPAN>  <A HREF="rtwtypes_h.html#type_uint32_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint32_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">uint32_T</FONT></A> re;
+</SPAN><SPAN><SPAN CLASS="LN">  109   </SPAN>  <A HREF="rtwtypes_h.html#type_uint32_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint32_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">uint32_T</FONT></A> im;
+</SPAN><SPAN><SPAN CLASS="LN">  110   </SPAN><B>}</B> <A NAME="type_cuint32_T">cuint32_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">  111   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  112   </SPAN><SPAN CLASS="CT">/*=======================================================================*</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  113   </SPAN><SPAN CLASS="CT"> * Min and Max:                                                          *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  114   </SPAN><SPAN CLASS="CT"> *   int8_T, int16_T, int32_T     - signed 8, 16, or 32 bit integers     *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  115   </SPAN><SPAN CLASS="CT"> *   uint8_T, uint16_T, uint32_T  - unsigned 8, 16, or 32 bit integers   *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  116   </SPAN><SPAN CLASS="CT"> *=======================================================================*/</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  117   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> MAX_int8_T                     ((<A HREF="rtwtypes_h.html#type_int8_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_int8_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">int8_T</FONT></A>)(127))
+</SPAN><SPAN><SPAN CLASS="LN">  118   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> MIN_int8_T                     ((<A HREF="rtwtypes_h.html#type_int8_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_int8_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">int8_T</FONT></A>)(-128))
+</SPAN><SPAN><SPAN CLASS="LN">  119   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> MAX_uint8_T                    ((<A HREF="rtwtypes_h.html#type_uint8_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint8_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">uint8_T</FONT></A>)(255U))
+</SPAN><SPAN><SPAN CLASS="LN">  120   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> MIN_uint8_T                    ((<A HREF="rtwtypes_h.html#type_uint8_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint8_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">uint8_T</FONT></A>)(0U))
+</SPAN><SPAN><SPAN CLASS="LN">  121   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> MAX_int16_T                    ((<A HREF="rtwtypes_h.html#type_int16_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_int16_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">int16_T</FONT></A>)(32767))
+</SPAN><SPAN><SPAN CLASS="LN">  122   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> MIN_int16_T                    ((<A HREF="rtwtypes_h.html#type_int16_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_int16_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">int16_T</FONT></A>)(-32768))
+</SPAN><SPAN><SPAN CLASS="LN">  123   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> MAX_uint16_T                   ((<A HREF="rtwtypes_h.html#type_uint16_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint16_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">uint16_T</FONT></A>)(65535U))
+</SPAN><SPAN><SPAN CLASS="LN">  124   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> MIN_uint16_T                   ((<A HREF="rtwtypes_h.html#type_uint16_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint16_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">uint16_T</FONT></A>)(0U))
+</SPAN><SPAN><SPAN CLASS="LN">  125   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> MAX_int32_T                    ((<A HREF="rtwtypes_h.html#type_int32_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_int32_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">int32_T</FONT></A>)(2147483647))
+</SPAN><SPAN><SPAN CLASS="LN">  126   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> MIN_int32_T                    ((<A HREF="rtwtypes_h.html#type_int32_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_int32_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">int32_T</FONT></A>)(-2147483647-1))
+</SPAN><SPAN><SPAN CLASS="LN">  127   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> MAX_uint32_T                   ((<A HREF="rtwtypes_h.html#type_uint32_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint32_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">uint32_T</FONT></A>)(0xFFFFFFFFU))
+</SPAN><SPAN><SPAN CLASS="LN">  128   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> MIN_uint32_T                   ((<A HREF="rtwtypes_h.html#type_uint32_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint32_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">uint32_T</FONT></A>)(0U))
+</SPAN><SPAN><SPAN CLASS="LN">  129   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  130   </SPAN><SPAN CLASS="CT">/* Logical type definitions */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  131   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">if</SPAN> !<SPAN CLASS="PP">defined</SPAN>(__cplusplus) &amp;&amp; !<SPAN CLASS="PP">defined</SPAN>(__true_false_are_keywords)
+</SPAN><SPAN><SPAN CLASS="LN">  132   </SPAN><FONT COLOR="#992211">#</FONT>  <SPAN CLASS="PP">ifndef</SPAN> false
+</SPAN><SPAN><SPAN CLASS="LN">  133   </SPAN><FONT COLOR="#992211">#</FONT>   <SPAN CLASS="PP">define</SPAN> false                       (0U)
+</SPAN><SPAN><SPAN CLASS="LN">  134   </SPAN><FONT COLOR="#992211">#</FONT>  <SPAN CLASS="PP">endif</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  135   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  136   </SPAN><FONT COLOR="#992211">#</FONT>  <SPAN CLASS="PP">ifndef</SPAN> true
+</SPAN><SPAN><SPAN CLASS="LN">  137   </SPAN><FONT COLOR="#992211">#</FONT>   <SPAN CLASS="PP">define</SPAN> true                        (1U)
+</SPAN><SPAN><SPAN CLASS="LN">  138   </SPAN><FONT COLOR="#992211">#</FONT>  <SPAN CLASS="PP">endif</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  139   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">endif</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  140   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  141   </SPAN><SPAN CLASS="CT">/*</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  142   </SPAN><SPAN CLASS="CT"> * Real-Time Workshop assumes the code is compiled on a target using a 2's compliment representation</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  143   </SPAN><SPAN CLASS="CT"> * for signed integer values.</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  144   </SPAN><SPAN CLASS="CT"> */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  145   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">if</SPAN> ((SCHAR_MIN + 1) != -SCHAR_MAX)
+</SPAN><SPAN><SPAN CLASS="LN">  146   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">error</SPAN> &quot;This code must be compiled using a 2's complement representation for signed integer values&quot;
+</SPAN><SPAN><SPAN CLASS="LN">  147   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">endif</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  148   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  149   </SPAN><SPAN CLASS="CT">/* This ID is used to detect inclusion of an incompatible rtwtypes.h */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  150   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> RTWTYPES_ID_C08S16I32L32N32F1
+</SPAN><SPAN><SPAN CLASS="LN">  151   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">else</SPAN>                                  <SPAN CLASS="CT">/* __TMWTYPES__ */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  152   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> TMWTYPES_PREVIOUSLY_INCLUDED
+</SPAN><SPAN><SPAN CLASS="LN">  153   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">endif</SPAN>                                 <SPAN CLASS="CT">/* __TMWTYPES__ */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  154   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  155   </SPAN><SPAN CLASS="CT">/* Block D-Work pointer type */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  156   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="DT">void</SPAN> * <A NAME="type_pointer_T">pointer_T</A>;
+</SPAN><SPAN><SPAN CLASS="LN">  157   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  158   </SPAN><SPAN CLASS="CT">/* Simulink specific types */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  159   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">ifndef</SPAN> __SIMSTRUC_TYPES_H__
+</SPAN><SPAN><SPAN CLASS="LN">  160   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> __SIMSTRUC_TYPES_H__
+</SPAN><SPAN><SPAN CLASS="LN">  161   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  162   </SPAN><SPAN CLASS="CT">/* States of an enabled subsystem */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  163   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="KW">enum</SPAN> <B>{</B>
+</SPAN><SPAN><SPAN CLASS="LN">  164   </SPAN>  SUBSYS_DISABLED = 0,
+</SPAN><SPAN><SPAN CLASS="LN">  165   </SPAN>  SUBSYS_ENABLED = 2,
+</SPAN><SPAN><SPAN CLASS="LN">  166   </SPAN>  SUBSYS_TRIGGERED = 16
+</SPAN><SPAN><SPAN CLASS="LN">  167   </SPAN><B>}</B> <A NAME="type_CondStates">CondStates</A>;
+</SPAN><SPAN><SPAN CLASS="LN">  168   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  169   </SPAN><SPAN CLASS="CT">/* Trigger directions: falling, either, and rising */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  170   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="KW">enum</SPAN> <B>{</B>
+</SPAN><SPAN><SPAN CLASS="LN">  171   </SPAN>  FALLING_ZERO_CROSSING = -1,
+</SPAN><SPAN><SPAN CLASS="LN">  172   </SPAN>  ANY_ZERO_CROSSING = 0,
+</SPAN><SPAN><SPAN CLASS="LN">  173   </SPAN>  RISING_ZERO_CROSSING = 1
+</SPAN><SPAN><SPAN CLASS="LN">  174   </SPAN><B>}</B> <A NAME="type_ZCDirection">ZCDirection</A>;
+</SPAN><SPAN><SPAN CLASS="LN">  175   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  176   </SPAN><SPAN CLASS="CT">/* Previous state of a trigger signal */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  177   </SPAN><SPAN CLASS="KW">typedef</SPAN> <A HREF="rtwtypes_h.html#type_uint8_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint8_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">uint8_T</FONT></A> <A NAME="type_ZCSigState">ZCSigState</A>;
+</SPAN><SPAN><SPAN CLASS="LN">  178   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  179   </SPAN><SPAN CLASS="CT">/* Initial value of a trigger zero crossing signal */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  180   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> UNINITIALIZED_ZCSIG            0x03U
+</SPAN><SPAN><SPAN CLASS="LN">  181   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> NEG_ZCSIG                      0x02U
+</SPAN><SPAN><SPAN CLASS="LN">  182   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> POS_ZCSIG                      0x01U
+</SPAN><SPAN><SPAN CLASS="LN">  183   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> ZERO_ZCSIG                     0x00U
+</SPAN><SPAN><SPAN CLASS="LN">  184   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  185   </SPAN><SPAN CLASS="CT">/* Current state of a trigger signal */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  186   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="KW">enum</SPAN> <B>{</B>
+</SPAN><SPAN><SPAN CLASS="LN">  187   </SPAN>  FALLING_ZCEVENT = -1,
+</SPAN><SPAN><SPAN CLASS="LN">  188   </SPAN>  NO_ZCEVENT = 0,
+</SPAN><SPAN><SPAN CLASS="LN">  189   </SPAN>  RISING_ZCEVENT = 1
+</SPAN><SPAN><SPAN CLASS="LN">  190   </SPAN><B>}</B> <A NAME="type_ZCEventType">ZCEventType</A>;
+</SPAN><SPAN><SPAN CLASS="LN">  191   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  192   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">endif</SPAN>                                 <SPAN CLASS="CT">/* __SIMSTRUC_TYPES_H__ */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  193   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">endif</SPAN>                                 <SPAN CLASS="CT">/* __RTWTYPES_H__ */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  194   </SPAN>
+</SPAN></PRE>
+</TD></TR></TABLE>
+</P>
+</BODY>
+</HTML>

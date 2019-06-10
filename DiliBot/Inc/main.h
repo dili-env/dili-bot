@@ -80,6 +80,26 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define INA2_Pin GPIO_PIN_0
+#define INA2_GPIO_Port GPIOC
+#define INB2_Pin GPIO_PIN_2
+#define INB2_GPIO_Port GPIOC
+#define INA3_Pin GPIO_PIN_0
+#define INA3_GPIO_Port GPIOA
+#define INB3_Pin GPIO_PIN_4
+#define INB3_GPIO_Port GPIOA
+#define INB1_Pin GPIO_PIN_8
+#define INB1_GPIO_Port GPIOD
+#define INA1_Pin GPIO_PIN_10
+#define INA1_GPIO_Port GPIOD
+#define ERROR_Pin GPIO_PIN_12
+#define ERROR_GPIO_Port GPIOD
+#define EN1_Pin GPIO_PIN_13
+#define EN1_GPIO_Port GPIOD
+#define EN2_Pin GPIO_PIN_14
+#define EN2_GPIO_Port GPIOD
+#define EN3_Pin GPIO_PIN_15
+#define EN3_GPIO_Port GPIOD
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

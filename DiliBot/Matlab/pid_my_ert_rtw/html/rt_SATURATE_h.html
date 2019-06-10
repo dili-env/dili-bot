@@ -1,0 +1,55 @@
+<HTML>
+<HEAD>
+<TITLE>RTW Report - rt_SATURATE.h </TITLE>
+<STYLE> .LN { font-style: italic; color: #888888 } </STYLE>
+<STYLE> .CT { font-style: italic; color: #117755 } </STYLE>
+<STYLE> .PP { font-style: bold;   color: #992211 } </STYLE>
+<STYLE> .KW { font-style: bold;   color: #112266 } </STYLE>
+<STYLE> .DT { font-style: bold;   color: #112266 } </STYLE>
+<SCRIPT language="JavaScript" type="text/javascript">
+<!--
+function rtwHilite(aBlock,aSsid) {
+    if (!aSsid) { aSsid = ""; }
+    window.location.href="matlab: if ~isempty(which('private/rtwbindmodel')), rtwprivate rtwbindmodel 'D:\\01_Ph_D\\dili-bot\\DiliBot\\Matlab\\pid_my.mdl' 'D:\\01_Ph_D\\dili-bot\\DiliBot\\Matlab\\pid_my_ert_rtw' '', end; rtwprivate code2model "+aBlock+" "+aSsid+";"
+} // end rtwHilite
+//-->
+</SCRIPT>
+</HEAD>
+<BODY BGCOLOR="#eeeeee" TEXT="#1122aa" ONLOAD="if (top) if (top.rtwFileOnLoad) top.rtwFileOnLoad(window);">
+<P>
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="6" WIDTH="100%" HEIGHT="100%"><TR><TD WIDTH="100%" VALIGN="top" BGCOLOR="#ffffff">
+<H4>File: <A HREF="file:///D:\01_Ph_D\dili-bot\DiliBot\Matlab\pid_my_ert_rtw\rt_SATURATE.h" TARGET="rtwreport_document_frame">D:\01_Ph_D\dili-bot\DiliBot\Matlab\pid_my_ert_rtw\rt_SATURATE.h</A></H4>
+<PRE id="RTWcode">
+<SPAN><SPAN CLASS="LN"><A NAME="1">    1   </A></SPAN><SPAN CLASS="CT">/*</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    2   </SPAN><SPAN CLASS="CT"> * File: rt_SATURATE.h</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    3   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    4   </SPAN><SPAN CLASS="CT"> * Real-Time Workshop code generated for Simulink model pid_my.</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    5   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    6   </SPAN><SPAN CLASS="CT"> * Model version                        : 1.9</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    7   </SPAN><SPAN CLASS="CT"> * Real-Time Workshop file version      : 7.4  (R2009b)  29-Jun-2009</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    8   </SPAN><SPAN CLASS="CT"> * Real-Time Workshop file generated on : Sun Mar 10 22:36:01 2019</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    9   </SPAN><SPAN CLASS="CT"> * TLC version                          : 7.4 (Jul 14 2009)</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   10   </SPAN><SPAN CLASS="CT"> * C/C++ source code generated on       : Sun Mar 10 22:36:02 2019</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   11   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   12   </SPAN><SPAN CLASS="CT"> * Target selection: ert.tlc</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   13   </SPAN><SPAN CLASS="CT"> * Embedded hardware selection: 32-bit Generic</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   14   </SPAN><SPAN CLASS="CT"> * Code generation objectives: Unspecified</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   15   </SPAN><SPAN CLASS="CT"> * Validation result: Not run</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   16   </SPAN><SPAN CLASS="CT"> */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   17   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   18   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">ifndef</SPAN> RTW_HEADER_rt_SATURATE_h_
+</SPAN><SPAN><SPAN CLASS="LN">   19   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> RTW_HEADER_rt_SATURATE_h_
+</SPAN><SPAN><SPAN CLASS="LN">   20   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> rt_SATURATE(sig,ll,ul)         (((sig) &gt;= (ul)) ? (ul) : (((sig) &lt;= (ll)) ? (ll) : (sig)) )
+</SPAN><SPAN><SPAN CLASS="LN">   21   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">endif</SPAN>                                 <SPAN CLASS="CT">/* RTW_HEADER_rt_SATURATE_h_ */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   22   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   23   </SPAN><SPAN CLASS="CT">/*</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   24   </SPAN><SPAN CLASS="CT"> * File trailer for Real-Time Workshop generated code.</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   25   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   26   </SPAN><SPAN CLASS="CT"> * [EOF]</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   27   </SPAN><SPAN CLASS="CT"> */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   28   </SPAN>
+</SPAN></PRE>
+</TD></TR></TABLE>
+</P>
+</BODY>
+</HTML>

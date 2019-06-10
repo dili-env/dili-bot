@@ -4,87 +4,149 @@
 #include "stm32f4xx_hal.h"
 #include "driver.h"
 
-extern SPI_HandleTypeDef hspi1;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim8;
 extern UART_HandleTypeDef huart4;
 extern UART_HandleTypeDef huart5;
+extern UART_HandleTypeDef huart2;
 
-uint8_t SPI_Buffer;
+#define OFFSET_ANGLE_1    (-48.92  )
+#define OFFSET_ANGLE_2    (  8.7808)
+#define OFFSET_GYRO_1     (2736.276)
+#define OFFSET_GYRO_2     (2129.149)
 
+#define PI                (3.14159265358979f)
+#define ADIS2RAD          (0.000174532952f)       /* raw *(1/100)*(1/180)*PI */
 /// @brief Retarget the C library function to UART
 PUTCHAR_PROTOTYPE {
-  HAL_UART_Transmit(&huart4, (uint8_t*)&ch, 1, 10);
+  HAL_UART_Transmit(&huart2, (uint8_t*)&ch, 1, 10);
   return ch;
 }
 
-void SPI_DataSend(uint8_t *data, uint16_t size) {
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
-  HAL_SPI_Transmit(&hspi1, data, size, 10);
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
+void dma_printf(uint8_t *buff_ptr, uint16_t buff_size) {
+  HAL_UART_Transmit_DMA(&huart4, buff_ptr, buff_size);
 }
 
-void TEST_AllMotor(void) {
-  if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET) {
-    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 500);
-    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, 500);
-    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 500);
-  } else {
-    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 00);
-    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, 00);
-    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, 00);
+/// @brief Decimal to ascii 5 digit include sign of dec
+int8_t dec2ascii5(int32_t dec, uint8_t* ascii_buff) {
+  int32_t tmp_dec = dec;
+  int8_t idx = 1;
+  /// Constrain dec from -999 to 0999
+  if (dec < -9999) {
+    for (int i = 0; i < 5; i++)
+      *(ascii_buff+i) = '-';
+    return 5;
+  } else if (dec > 9999) {
+    for (int i = 0; i < 5; i++)
+      *(ascii_buff+i) = '+';
+    return 5;
+  }
+  /// Sign position
+  if (dec < 0) {
+      *ascii_buff = '-';
+      tmp_dec = -dec;
+  } else *ascii_buff = '0';
+  *(ascii_buff + (idx++)) = (tmp_dec / 1000) + '0';
+  tmp_dec = tmp_dec % 1000;
+  *(ascii_buff + (idx++)) = (tmp_dec / 100)  + '0';
+  tmp_dec = tmp_dec % 100;
+  *(ascii_buff + (idx++)) = (tmp_dec / 10) + '0';
+  *(ascii_buff + (idx++)) = (tmp_dec % 10) + '0';
+  return idx;
+}
+
+/*****************************************************************************/
+/* ADIS IMU manipulate function definition ***********************************/
+// Prototype
+TokenType_t decodeToken(FrameToken token, int32_t *idata);
+bool decodeFrame(void);
+
+// DMA buffer is set as Frame data
+static FrameData adisMessage;
+// IMU data
+static ADIS_DATA_t imuData;
+
+/* API function provided ******************/
+/// @brief ADIS IMU data get
+ADIS_DATA_t adisGetData(void) {
+  return imuData;
+}
+
+/// @brief ADIS IMU radian data get with calibration
+ADIS_RAD_DATA_t adisGetRadData(void) {
+  ADIS_RAD_DATA_t tmpRadData;
+  
+  tmpRadData.angle_r1 = (imuData.angle1 - OFFSET_ANGLE_1)*ADIS2RAD;
+  tmpRadData.angle_r2 = (imuData.angle2 - OFFSET_ANGLE_2)*ADIS2RAD;
+  
+  tmpRadData.gyro_r1 = (imuData.gyro1 - OFFSET_GYRO_1)*ADIS2RAD;
+  tmpRadData.gyro_r2 = (imuData.gyro2 - OFFSET_GYRO_2)*ADIS2RAD;
+
+  return tmpRadData;
+}
+
+/// @brief Start DMA interupt receive
+HAL_StatusTypeDef adisStartIRQ(UART_HandleTypeDef *huart) {
+  HAL_StatusTypeDef status = 
+    HAL_UART_Receive_DMA(huart, (uint8_t*)&adisMessage, DMA_BUFF_LENGTH);
+  return status;
+}
+
+
+/* Private function definition ************/
+/// @brief UART5 DMA RX callback handler
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+  if (huart->Instance == UART5) {
+    /// Check start/end frame
+    if ((FRAME_START != adisMessage.byteStart) &&
+         FRAME_END   != adisMessage.byteEnd) {
+      HAL_UART_DMAStop(&huart5);
+      printf("Frame error -> restart\n");
+      HAL_UART_Receive_DMA(huart, (uint8_t*)&adisMessage, DMA_BUFF_LENGTH);
+      return;
+    }
+    /// Decode frame
+    if (false == decodeFrame()) printf("Decode fail\n");
+    else { /* Do not thing if decoded success */ }
   }
 }
 
-void TEST_Motor_API(void) {
-  static int tmp = 0;
+/// @brief decode one frame
+bool decodeFrame(void) {
+  TokenType_t type;
 
-  if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET) {
-    printf("Value (1) is: %d -- Value (2) is: %d -- Value (3) is: %d\r\n",
-            TIM1->CNT, TIM4->CNT, TIM8->CNT);
-    tmp ++;
-  }
-  if (tmp > 3) motor_Disable(MOTOR_1);
-  if (tmp > 6) motor_Disable(MOTOR_2);
-  if (tmp > 9) motor_Disable(MOTOR_3);
-  if (tmp > 12) motor_Enable(MOTOR_1);
-  if (tmp > 15) motor_Enable(MOTOR_2);
-  if (tmp > 18) motor_Enable(MOTOR_3);
-  if (tmp > 20) motor_DisableAll();
-  if (tmp > 22) motor_EnableAll();
-  if (tmp > 25) motor_SetSpeed(MOTOR_1, 300);
-  if (tmp > 28) motor_SetSpeed(MOTOR_2, 500);
-  if (tmp > 31) motor_SetSpeed(MOTOR_3, 700);
-  if (tmp > 34) motor_SetSpeed(MOTOR_1, -300);
-  if (tmp > 37) motor_SetSpeed(MOTOR_2, -500);
-  if (tmp > 40) motor_SetSpeed(MOTOR_3, -700);
-  if (tmp > 50) motor_DisableAll();
-  HAL_Delay(500);
+  type  = decodeToken(adisMessage.token[0], &imuData.angle1);
+  type += decodeToken(adisMessage.token[1], &imuData.angle2);
+  type += decodeToken(adisMessage.token[2], &imuData.angle3);
+
+  type += decodeToken(adisMessage.token[3], &imuData.gyro1);
+  type += decodeToken(adisMessage.token[4], &imuData.gyro2);
+  type += decodeToken(adisMessage.token[5], &imuData.gyro3);
+
+  type += decodeToken(adisMessage.token[6], &imuData.acce1);
+  type += decodeToken(adisMessage.token[7], &imuData.acce2);
+  type += decodeToken(adisMessage.token[8], &imuData.acce3);
+
+  if (TOKEN_NORMAL != type) return false;
+  return true;
 }
 
+/// @brief decode each token
+TokenType_t decodeToken(FrameToken token, int32_t *idata) {
+  int32_t tmp = 0;
+  tmp += (token.bytetoken[1] - '0')*10000;
+  tmp += (token.bytetoken[2] - '0')*1000;
+  tmp += (token.bytetoken[3] - '0')*100;
+  tmp += (token.bytetoken[4] - '0')*10;
+  tmp += (token.bytetoken[5] - '0');
 
-void TEST_Encoder_API(void) {
-  static int pre_encoder[3]; // testing encoder
-
-  if(encoder_ReadMotor(MOTOR_1) != pre_encoder[0]) {
-    pre_encoder[0] = encoder_ReadMotor(MOTOR_1);
-    printf("Current encoder 1 value = %d\r\n", pre_encoder[0]);
-  }
-  if(encoder_ReadMotor(MOTOR_2) != pre_encoder[1]) {
-    pre_encoder[1] = encoder_ReadMotor(MOTOR_2);
-    printf("Current encoder 2 value = %d\r\n", pre_encoder[1]);
-  }
-  if(encoder_ReadMotor(MOTOR_3) != pre_encoder[2]) {
-    pre_encoder[2] = encoder_ReadMotor(MOTOR_3);
-    printf("Current encoder 3 value = %d\r\n", pre_encoder[2]);
-  }
+  if (token.bytetoken[0] == '-') tmp = -tmp;
+  *idata = tmp;
+  if (token.bytetoken[6] != ' ') return TOKEN_UNKNOWN;
+  return TOKEN_NORMAL;
 }
-
-
-
-
 
 /*****************************************************************************/
 /* IMU GY951 configuration function definition *******************************/
@@ -159,9 +221,9 @@ int imu_StartIRQ(float *imu_buffer, uint8_t imu_size) {
 int motor_Init(void) {
   int tim_start_status = 0;
   // Initialize motor control pin
-  SPI_Buffer = 0xD5;
-  SPI_DataSend(&SPI_Buffer, 1);
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+  // Enable all motor and set direction to clockwise
+  HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin| EN2_Pin | EN3_Pin, GPIO_PIN_SET);
+
   // Initialize all motor PWM
   tim_start_status  = HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
   tim_start_status += HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
@@ -178,15 +240,13 @@ int motor_Init(void) {
 void motor_Disable(MotorIndex motor_index) {
   switch (motor_index) {
     case MOTOR_1:
-      SPI_Buffer &= (~BIT_EN1);
-      SPI_DataSend(&SPI_Buffer, 1);
+      HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_RESET);
       break;
     case MOTOR_2:
-      SPI_Buffer &= (~BIT_EN2);
-      SPI_DataSend(&SPI_Buffer, 1);
+      HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, GPIO_PIN_RESET);
       break;
     case MOTOR_3:
-      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, GPIO_PIN_RESET);
       break;
     default:
       break;
@@ -199,9 +259,7 @@ void motor_DisableAll(void) {
   motor_SetSpeed(MOTOR_1, 0);
   motor_SetSpeed(MOTOR_2, 0);
   motor_SetSpeed(MOTOR_3, 0);
-  SPI_Buffer &= ~(BIT_EN1|BIT_EN2);
-  SPI_DataSend(&SPI_Buffer, 1);
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(EN_GPIO_Port, EN1_Pin | EN2_Pin | EN3_Pin, GPIO_PIN_RESET);
 }
 
 /// @brief Enable motor with specifid motor index
@@ -212,15 +270,13 @@ void motor_DisableAll(void) {
 void motor_Enable(MotorIndex motor_index) {
   switch (motor_index) {
     case MOTOR_1:
-      SPI_Buffer |= BIT_EN1;
-      SPI_DataSend(&SPI_Buffer, 1);
+      HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, GPIO_PIN_SET);
       break;
     case MOTOR_2:
-      SPI_Buffer |= BIT_EN2;
-      SPI_DataSend(&SPI_Buffer, 1);
+      HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, GPIO_PIN_SET);
       break;
     case MOTOR_3:
-      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, GPIO_PIN_SET);
       break;
     default:
       break;
@@ -230,9 +286,7 @@ void motor_Enable(MotorIndex motor_index) {
 /// @brief Enable all motor (1,2,3)
 /// @param none
 void motor_EnableAll(void) {
-  SPI_Buffer |= (BIT_EN1|BIT_EN2);
-  SPI_DataSend(&SPI_Buffer, 1);
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(EN_GPIO_Port, EN1_Pin | EN2_Pin | EN3_Pin, GPIO_PIN_SET);
   motor_SetSpeed(MOTOR_1, 0);
   motor_SetSpeed(MOTOR_2, 0);
   motor_SetSpeed(MOTOR_3, 0);
@@ -264,35 +318,32 @@ int motor_SetSpeed(MotorIndex motor_index, int value) {
   switch (motor_index) {
     case MOTOR_1:
       if (dir == MOTOR_FORWARD) {
-        SPI_Buffer |= BIT_INA1;
-        SPI_Buffer &= ~BIT_INB1;
+        HAL_GPIO_WritePin(INA1_GPIO_Port, INA1_Pin, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(INB1_GPIO_Port, INB1_Pin, GPIO_PIN_RESET);
       } else {
-        SPI_Buffer &= ~BIT_INA1;
-        SPI_Buffer |=  BIT_INB1;
+        HAL_GPIO_WritePin(INA1_GPIO_Port, INA1_Pin, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(INB1_GPIO_Port, INB1_Pin, GPIO_PIN_SET);
       }
-      SPI_DataSend(&SPI_Buffer, 1);
       __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, value);
       break;
     case MOTOR_2:
       if (dir == MOTOR_FORWARD) {
-        SPI_Buffer |= BIT_INA2;
-        SPI_Buffer &= ~BIT_INB2;
+        HAL_GPIO_WritePin(INA2_GPIO_Port, INA2_Pin, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(INB2_GPIO_Port, INB2_Pin, GPIO_PIN_RESET);
       } else {
-        SPI_Buffer &= ~BIT_INA2;
-        SPI_Buffer |=  BIT_INB2;
+        HAL_GPIO_WritePin(INA2_GPIO_Port, INA2_Pin, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(INB2_GPIO_Port, INB2_Pin, GPIO_PIN_SET);
       }
-      SPI_DataSend(&SPI_Buffer, 1);
       __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, value);
       break;
     case MOTOR_3:
       if (dir == MOTOR_FORWARD) {
-        SPI_Buffer |= BIT_INA3;
-        SPI_Buffer &= ~BIT_INB3;
+        HAL_GPIO_WritePin(INA3_GPIO_Port, INA3_Pin, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(INB3_GPIO_Port, INB3_Pin, GPIO_PIN_RESET);
       } else {
-        SPI_Buffer &= ~BIT_INA3;
-        SPI_Buffer |=  BIT_INB3;
+        HAL_GPIO_WritePin(INA3_GPIO_Port, INA3_Pin, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(INB3_GPIO_Port, INB3_Pin, GPIO_PIN_SET);
       }
-      SPI_DataSend(&SPI_Buffer, 1);
       __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_3, value);
       break;
     default:
@@ -321,6 +372,10 @@ int encoder_Init(void) {
   return init_timer_status;
 }
 
+/// @brief Read current specified encoder value
+/// @param motor_idx index of motor desired
+/*  Note: Timer registers' value were calibrated before return
+*/
 int encoder_ReadMotor(MotorIndex motor_idx) {
   static int32_t pos[3], pos_pre[3];
   static int32_t d_pos[3], cur_pulse[3];
@@ -349,5 +404,3 @@ int encoder_ReadMotor(MotorIndex motor_idx) {
   
   return cur_pulse[motor_idx];
 }
-
-

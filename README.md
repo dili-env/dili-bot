@@ -1,6 +1,11 @@
 # dili-bot
 Dilibot project repository
 
+/*******************************************/
+Dilibot is implemented EKF and work fine now.
+Back up project June 10, 2019
+/*******************************************/
+
 /*Information of current project*/
 This project intent to create a Dili-Bot (Ballbot software) deploy on STM32F407-Discovery board.
 
@@ -28,5 +33,22 @@ PWM problem:
 Encoder problem:
     Number of counting up value of one revolution is not test at the current time (TODO:)
 
+Driver configuration interface update Mar.18:
+    |---------------|---------------|---------------|
+    |PWM1   : PA15  |INA1   : PD10  |M1_CC1 : PE11  |
+    |PWM2   : PB3   |INB1   : PD8   |M1_CC2 : PE9   |
+    |PWM3   : PB10  |---------------|---------------|
+    |---------------|INA2   : PC0   |M2_CC1 : PB7   |
+    |---------------|INB2   : PC2   |M2_CC2 : PB6   |
+    |EN1    : PD13  |---------------|---------------|
+    |EN2    : PD14  |INA3   : PA0   |M3_CC1 : PC7   |
+    |EN3    : PD15  |INB3   : PA4   |M3_CC2 : PC6   |
+    |---------------|---------------|---------------|
+    *Note:  PWM interface               : 5V
+            ENx interface               : 5V
+            INAx/INBx interface         : 5V
+            Encoder Mx_CCy interface    : 3V3
+
 /* Work log updating */
+[March 18] Update API for hardware configuration base board rev.b
 [March 09] Initialization commit to repository

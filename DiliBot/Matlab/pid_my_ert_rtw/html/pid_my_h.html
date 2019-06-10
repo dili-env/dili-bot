@@ -1,0 +1,174 @@
+<HTML>
+<HEAD>
+<TITLE>RTW Report - pid_my.h </TITLE>
+<STYLE> .LN { font-style: italic; color: #888888 } </STYLE>
+<STYLE> .CT { font-style: italic; color: #117755 } </STYLE>
+<STYLE> .PP { font-style: bold;   color: #992211 } </STYLE>
+<STYLE> .KW { font-style: bold;   color: #112266 } </STYLE>
+<STYLE> .DT { font-style: bold;   color: #112266 } </STYLE>
+<SCRIPT language="JavaScript" type="text/javascript">
+<!--
+function rtwHilite(aBlock,aSsid) {
+    if (!aSsid) { aSsid = ""; }
+    window.location.href="matlab: if ~isempty(which('private/rtwbindmodel')), rtwprivate rtwbindmodel 'D:\\01_Ph_D\\dili-bot\\DiliBot\\Matlab\\pid_my.mdl' 'D:\\01_Ph_D\\dili-bot\\DiliBot\\Matlab\\pid_my_ert_rtw' '', end; rtwprivate code2model "+aBlock+" "+aSsid+";"
+} // end rtwHilite
+//-->
+</SCRIPT>
+</HEAD>
+<BODY BGCOLOR="#eeeeee" TEXT="#1122aa" ONLOAD="if (top) if (top.rtwFileOnLoad) top.rtwFileOnLoad(window);">
+<P>
+<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="6" WIDTH="100%" HEIGHT="100%"><TR><TD WIDTH="100%" VALIGN="top" BGCOLOR="#ffffff">
+<H4>File: <A HREF="file:///D:\01_Ph_D\dili-bot\DiliBot\Matlab\pid_my_ert_rtw\pid_my.h" TARGET="rtwreport_document_frame">D:\01_Ph_D\dili-bot\DiliBot\Matlab\pid_my_ert_rtw\pid_my.h</A></H4>
+<PRE id="RTWcode">
+<SPAN><SPAN CLASS="LN"><A NAME="1">    1   </A></SPAN><SPAN CLASS="CT">/*</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    2   </SPAN><SPAN CLASS="CT"> * File: pid_my.h</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    3   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    4   </SPAN><SPAN CLASS="CT"> * Real-Time Workshop code generated for Simulink model pid_my.</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    5   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    6   </SPAN><SPAN CLASS="CT"> * Model version                        : 1.9</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    7   </SPAN><SPAN CLASS="CT"> * Real-Time Workshop file version      : 7.4  (R2009b)  29-Jun-2009</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    8   </SPAN><SPAN CLASS="CT"> * Real-Time Workshop file generated on : Sun Mar 10 22:36:01 2019</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">    9   </SPAN><SPAN CLASS="CT"> * TLC version                          : 7.4 (Jul 14 2009)</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   10   </SPAN><SPAN CLASS="CT"> * C/C++ source code generated on       : Sun Mar 10 22:36:02 2019</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   11   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   12   </SPAN><SPAN CLASS="CT"> * Target selection: ert.tlc</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   13   </SPAN><SPAN CLASS="CT"> * Embedded hardware selection: 32-bit Generic</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   14   </SPAN><SPAN CLASS="CT"> * Code generation objectives: Unspecified</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   15   </SPAN><SPAN CLASS="CT"> * Validation result: Not run</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   16   </SPAN><SPAN CLASS="CT"> */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   17   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   18   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">ifndef</SPAN> RTW_HEADER_pid_my_h_
+</SPAN><SPAN><SPAN CLASS="LN">   19   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">define</SPAN> RTW_HEADER_pid_my_h_
+</SPAN><SPAN><SPAN CLASS="LN">   20   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">ifndef</SPAN> pid_my_COMMON_INCLUDES_
+</SPAN><SPAN><SPAN CLASS="LN">   21   </SPAN><FONT COLOR="#992211">#</FONT> <SPAN CLASS="PP">define</SPAN> pid_my_COMMON_INCLUDES_
+</SPAN><SPAN><SPAN CLASS="LN">   22   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">include</SPAN> <FONT COLOR="#992211">&lt;stddef.h&gt;</FONT>
+</SPAN><SPAN><SPAN CLASS="LN">   23   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">include</SPAN> <FONT COLOR="#992211">&lt;string.h&gt;</FONT>
+</SPAN><SPAN><SPAN CLASS="LN">   24   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">include</SPAN> <FONT COLOR="#992211">&quot;rtwtypes.h&quot;</FONT>
+</SPAN><SPAN><SPAN CLASS="LN">   25   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">include</SPAN> <FONT COLOR="#992211">&quot;rt_SATURATE.h&quot;</FONT>
+</SPAN><SPAN><SPAN CLASS="LN">   26   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">endif</SPAN>                                 <SPAN CLASS="CT">/* pid_my_COMMON_INCLUDES_ */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   27   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   28   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">include</SPAN> <FONT COLOR="#992211">&quot;pid_my_types.h&quot;</FONT>
+</SPAN><SPAN><SPAN CLASS="LN">   29   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   30   </SPAN><SPAN CLASS="CT">/* Macros for accessing real-time model data structure */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   31   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">ifndef</SPAN> rtmGetErrorStatus
+</SPAN><SPAN><SPAN CLASS="LN">   32   </SPAN><FONT COLOR="#992211">#</FONT> <SPAN CLASS="PP">define</SPAN> rtmGetErrorStatus(rtm)        ((rtm)-&gt;errorStatus)
+</SPAN><SPAN><SPAN CLASS="LN">   33   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">endif</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   34   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   35   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">ifndef</SPAN> rtmSetErrorStatus
+</SPAN><SPAN><SPAN CLASS="LN">   36   </SPAN><FONT COLOR="#992211">#</FONT> <SPAN CLASS="PP">define</SPAN> rtmSetErrorStatus(rtm, val)   ((rtm)-&gt;errorStatus = (val))
+</SPAN><SPAN><SPAN CLASS="LN">   37   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">endif</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   38   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   39   </SPAN><SPAN CLASS="CT">/* Block states (auto storage) for system '<A href="javascript:rtwHilite('pid_my')"><FONT color="#117755"><I>&lt;Root&gt;</I></FONT></A>' */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   40   </SPAN><SPAN CLASS="KW">typedef</SPAN> <SPAN CLASS="KW">struct</SPAN> <B>{</B>
+</SPAN><SPAN><SPAN CLASS="LN">   41   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> Integrator_DSTATE;            <SPAN CLASS="CT">/* '<A href="javascript:rtwHilite('pid_my:3:1575')"><FONT color="#117755"><I>&lt;S1&gt;/Integrator</I></FONT></A>' */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   42   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> Filter_DSTATE;                <SPAN CLASS="CT">/* '<A href="javascript:rtwHilite('pid_my:3:1576')"><FONT color="#117755"><I>&lt;S1&gt;/Filter</I></FONT></A>' */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   43   </SPAN>  <A HREF="rtwtypes_h.html#type_int32_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_int32_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">int32_T</FONT></A> clockTickCounter;            <SPAN CLASS="CT">/* '<A href="javascript:rtwHilite('pid_my:1')"><FONT color="#117755"><I>&lt;Root&gt;/Pulse Generator</I></FONT></A>' */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   44   </SPAN><B>}</B> <A NAME="type_D_Work_pid_my">D_Work_pid_my</A>;
+</SPAN><SPAN><SPAN CLASS="LN">   45   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   46   </SPAN><SPAN CLASS="CT">/* Parameters (auto storage) */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   47   </SPAN><SPAN CLASS="KW">struct</SPAN> Parameters_pid_my_ <B>{</B>
+</SPAN><SPAN><SPAN CLASS="LN">   48   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> PulseGenerator_Amp;           <SPAN CLASS="CT">/* Expression: 1500</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   49   </SPAN><SPAN CLASS="CT">                                        * Referenced by: '<A href="javascript:rtwHilite('pid_my:1')"><FONT color="#117755"><I>&lt;Root&gt;/Pulse Generator</I></FONT></A>'</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   50   </SPAN><SPAN CLASS="CT">                                        */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   51   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> PulseGenerator_Period;        <SPAN CLASS="CT">/* Computed Parameter: PulseGenerator_Period</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   52   </SPAN><SPAN CLASS="CT">                                        * Referenced by: '<A href="javascript:rtwHilite('pid_my:1')"><FONT color="#117755"><I>&lt;Root&gt;/Pulse Generator</I></FONT></A>'</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   53   </SPAN><SPAN CLASS="CT">                                        */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   54   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> PulseGenerator_Duty;          <SPAN CLASS="CT">/* Computed Parameter: PulseGenerator_Duty</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   55   </SPAN><SPAN CLASS="CT">                                        * Referenced by: '<A href="javascript:rtwHilite('pid_my:1')"><FONT color="#117755"><I>&lt;Root&gt;/Pulse Generator</I></FONT></A>'</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   56   </SPAN><SPAN CLASS="CT">                                        */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   57   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> PulseGenerator_PhaseDelay;    <SPAN CLASS="CT">/* Expression: 0</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   58   </SPAN><SPAN CLASS="CT">                                        * Referenced by: '<A href="javascript:rtwHilite('pid_my:1')"><FONT color="#117755"><I>&lt;Root&gt;/Pulse Generator</I></FONT></A>'</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   59   </SPAN><SPAN CLASS="CT">                                        */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   60   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> ProportionalGain_Gain;        <SPAN CLASS="CT">/* Expression: P</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   61   </SPAN><SPAN CLASS="CT">                                        * Referenced by: '<A href="javascript:rtwHilite('pid_my:3:1568')"><FONT color="#117755"><I>&lt;S1&gt;/Proportional Gain</I></FONT></A>'</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   62   </SPAN><SPAN CLASS="CT">                                        */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   63   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> Integrator_gainval;           <SPAN CLASS="CT">/* Computed Parameter: Integrator_gainval</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   64   </SPAN><SPAN CLASS="CT">                                        * Referenced by: '<A href="javascript:rtwHilite('pid_my:3:1575')"><FONT color="#117755"><I>&lt;S1&gt;/Integrator</I></FONT></A>'</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   65   </SPAN><SPAN CLASS="CT">                                        */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   66   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> Integrator_IC;                <SPAN CLASS="CT">/* Expression: InitialConditionForIntegrator</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   67   </SPAN><SPAN CLASS="CT">                                        * Referenced by: '<A href="javascript:rtwHilite('pid_my:3:1575')"><FONT color="#117755"><I>&lt;S1&gt;/Integrator</I></FONT></A>'</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   68   </SPAN><SPAN CLASS="CT">                                        */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   69   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> DerivativeGain_Gain;          <SPAN CLASS="CT">/* Expression: D</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   70   </SPAN><SPAN CLASS="CT">                                        * Referenced by: '<A href="javascript:rtwHilite('pid_my:3:1570')"><FONT color="#117755"><I>&lt;S1&gt;/Derivative Gain</I></FONT></A>'</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   71   </SPAN><SPAN CLASS="CT">                                        */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   72   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> Filter_gainval;               <SPAN CLASS="CT">/* Computed Parameter: Filter_gainval</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   73   </SPAN><SPAN CLASS="CT">                                        * Referenced by: '<A href="javascript:rtwHilite('pid_my:3:1576')"><FONT color="#117755"><I>&lt;S1&gt;/Filter</I></FONT></A>'</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   74   </SPAN><SPAN CLASS="CT">                                        */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   75   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> Filter_IC;                    <SPAN CLASS="CT">/* Expression: InitialConditionForFilter</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   76   </SPAN><SPAN CLASS="CT">                                        * Referenced by: '<A href="javascript:rtwHilite('pid_my:3:1576')"><FONT color="#117755"><I>&lt;S1&gt;/Filter</I></FONT></A>'</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   77   </SPAN><SPAN CLASS="CT">                                        */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   78   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> FilterCoefficient_Gain;       <SPAN CLASS="CT">/* Expression: N</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   79   </SPAN><SPAN CLASS="CT">                                        * Referenced by: '<A href="javascript:rtwHilite('pid_my:3:1573')"><FONT color="#117755"><I>&lt;S1&gt;/Filter Coefficient</I></FONT></A>'</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   80   </SPAN><SPAN CLASS="CT">                                        */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   81   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> Saturation_UpperSat;          <SPAN CLASS="CT">/* Expression: 10</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   82   </SPAN><SPAN CLASS="CT">                                        * Referenced by: '<A href="javascript:rtwHilite('pid_my:13')"><FONT color="#117755"><I>&lt;Root&gt;/Saturation</I></FONT></A>'</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   83   </SPAN><SPAN CLASS="CT">                                        */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   84   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> Saturation_LowerSat;          <SPAN CLASS="CT">/* Expression: -10</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   85   </SPAN><SPAN CLASS="CT">                                        * Referenced by: '<A href="javascript:rtwHilite('pid_my:13')"><FONT color="#117755"><I>&lt;Root&gt;/Saturation</I></FONT></A>'</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   86   </SPAN><SPAN CLASS="CT">                                        */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   87   </SPAN>  <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> IntegralGain_Gain;            <SPAN CLASS="CT">/* Expression: I</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   88   </SPAN><SPAN CLASS="CT">                                        * Referenced by: '<A href="javascript:rtwHilite('pid_my:3:1569')"><FONT color="#117755"><I>&lt;S1&gt;/Integral Gain</I></FONT></A>'</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   89   </SPAN><SPAN CLASS="CT">                                        */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   90   </SPAN><B>}</B>;
+</SPAN><SPAN><SPAN CLASS="LN">   91   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   92   </SPAN><SPAN CLASS="CT">/* Real-time Model Data Structure */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   93   </SPAN><SPAN CLASS="KW">struct</SPAN> <A HREF="pid_my_types_h.html#type_RT_MODEL_pid_my" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_RT_MODEL_pid_my')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">RT_MODEL_pid_my</FONT></A> <B>{</B>
+</SPAN><SPAN><SPAN CLASS="LN">   94   </SPAN>  <SPAN CLASS="DT">const</SPAN> <A HREF="rtwtypes_h.html#type_char_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_char_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">char_T</FONT></A> * <SPAN CLASS="DT">volatile</SPAN> errorStatus;
+</SPAN><SPAN><SPAN CLASS="LN">   95   </SPAN><B>}</B>;
+</SPAN><SPAN><SPAN CLASS="LN">   96   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   97   </SPAN><SPAN CLASS="CT">/* Block parameters (auto storage) */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">   98   </SPAN><SPAN CLASS="DT">extern</SPAN> <A HREF="pid_my_types_h.html#type_Parameters_pid_my" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_Parameters_pid_my')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">Parameters_pid_my</FONT></A> pid_my_P;
+</SPAN><SPAN><SPAN CLASS="LN">   99   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  100   </SPAN><SPAN CLASS="CT">/* Block states (auto storage) */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  101   </SPAN><SPAN CLASS="DT">extern</SPAN> <A HREF="pid_my_h.html#type_D_Work_pid_my" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_D_Work_pid_my')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">D_Work_pid_my</FONT></A> pid_my_DWork;
+</SPAN><SPAN><SPAN CLASS="LN">  102   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  103   </SPAN><SPAN CLASS="CT">/*</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  104   </SPAN><SPAN CLASS="CT"> * Exported Global Signals</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  105   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  106   </SPAN><SPAN CLASS="CT"> * Note: Exported global signals are block signals with an exported global</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  107   </SPAN><SPAN CLASS="CT"> * storage class designation.  RTW declares the memory for these signals</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  108   </SPAN><SPAN CLASS="CT"> * and exports their symbols.</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  109   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  110   </SPAN><SPAN CLASS="CT"> */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  111   </SPAN><SPAN CLASS="DT">extern</SPAN> <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> <A HREF="pid_my_c.html#var_In2" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_In2');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">In2</FONT></A>;                     <SPAN CLASS="CT">/* '<A href="javascript:rtwHilite('pid_my:9')"><FONT color="#117755"><I>&lt;Root&gt;/In2</I></FONT></A>' */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  112   </SPAN><SPAN CLASS="DT">extern</SPAN> <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> <A HREF="pid_my_c.html#var_Out2" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_Out2');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">Out2</FONT></A>;                    <SPAN CLASS="CT">/* '<A href="javascript:rtwHilite('pid_my:2')"><FONT color="#117755"><I>&lt;Root&gt;/Subtract</I></FONT></A>' */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  113   </SPAN><SPAN CLASS="DT">extern</SPAN> <A HREF="rtwtypes_h.html#type_real_T" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">real_T</FONT></A> <A HREF="pid_my_c.html#var_Out1" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_Out1');" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">Out1</FONT></A>;                    <SPAN CLASS="CT">/* '<A href="javascript:rtwHilite('pid_my:13')"><FONT color="#117755"><I>&lt;Root&gt;/Saturation</I></FONT></A>' */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  114   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  115   </SPAN><SPAN CLASS="CT">/* Model entry point functions */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  116   </SPAN><SPAN CLASS="DT">extern</SPAN> <SPAN CLASS="DT">void</SPAN> <A HREF="pid_my_c.html#fcn_pid_my_initialize" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_pid_my_initialize');"  TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">pid_my_initialize</FONT></A>(<SPAN CLASS="DT">void</SPAN>);
+</SPAN><SPAN><SPAN CLASS="LN">  117   </SPAN><SPAN CLASS="DT">extern</SPAN> <SPAN CLASS="DT">void</SPAN> <A HREF="pid_my_c.html#fcn_pid_my_step" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_pid_my_step');"  TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">pid_my_step</FONT></A>(<SPAN CLASS="DT">void</SPAN>);
+</SPAN><SPAN><SPAN CLASS="LN">  118   </SPAN><SPAN CLASS="DT">extern</SPAN> <SPAN CLASS="DT">void</SPAN> <A HREF="pid_my_c.html#fcn_pid_my_terminate" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'fcn_pid_my_terminate');"  TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">pid_my_terminate</FONT></A>(<SPAN CLASS="DT">void</SPAN>);
+</SPAN><SPAN><SPAN CLASS="LN">  119   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  120   </SPAN><SPAN CLASS="CT">/* Real-time Model object */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  121   </SPAN><SPAN CLASS="DT">extern</SPAN> <A HREF="pid_my_types_h.html#type_RT_MODEL_pid_my" ONCLICK="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_RT_MODEL_pid_my')" TARGET="rtwreport_document_frame"><FONT COLOR="#1122aa">RT_MODEL_pid_my</FONT></A> *pid_my_M;
+</SPAN><SPAN><SPAN CLASS="LN">  122   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  123   </SPAN><SPAN CLASS="CT">/*-</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  124   </SPAN><SPAN CLASS="CT"> * The generated code includes comments that allow you to trace directly</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  125   </SPAN><SPAN CLASS="CT"> * back to the appropriate location in the model.  The basic format</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  126   </SPAN><SPAN CLASS="CT"> * is &lt;system&gt;/block_name, where system is the system number (uniquely</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  127   </SPAN><SPAN CLASS="CT"> * assigned by Simulink) and block_name is the name of the block.</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  128   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  129   </SPAN><SPAN CLASS="CT"> * Use the MATLAB hilite_system command to trace the generated code back</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  130   </SPAN><SPAN CLASS="CT"> * to the model.  For example,</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  131   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  132   </SPAN><SPAN CLASS="CT"> * hilite_system('&lt;S3&gt;')    - opens system 3</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  133   </SPAN><SPAN CLASS="CT"> * hilite_system('&lt;S3&gt;/Kp') - opens and selects block Kp which resides in S3</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  134   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  135   </SPAN><SPAN CLASS="CT"> * Here is the system hierarchy for this model</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  136   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  137   </SPAN><SPAN CLASS="CT"> * '<A href="javascript:rtwHilite('pid_my')"><FONT color="#117755"><I>&lt;Root&gt;</I></FONT></A>' : pid_my</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  138   </SPAN><SPAN CLASS="CT"> * '<A href="javascript:rtwHilite('pid_my:3')"><FONT color="#117755"><I>&lt;S1&gt;</I></FONT></A>'   : pid_my/Discrete PID Controller</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  139   </SPAN><SPAN CLASS="CT"> */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  140   </SPAN><FONT COLOR="#992211">#</FONT><SPAN CLASS="PP">endif</SPAN>                                 <SPAN CLASS="CT">/* RTW_HEADER_pid_my_h_ */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  141   </SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  142   </SPAN><SPAN CLASS="CT">/*</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  143   </SPAN><SPAN CLASS="CT"> * File trailer for Real-Time Workshop generated code.</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  144   </SPAN><SPAN CLASS="CT"> *</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  145   </SPAN><SPAN CLASS="CT"> * [EOF]</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  146   </SPAN><SPAN CLASS="CT"> */</SPAN>
+</SPAN><SPAN><SPAN CLASS="LN">  147   </SPAN>
+</SPAN></PRE>
+</TD></TR></TABLE>
+</P>
+</BODY>
+</HTML>
